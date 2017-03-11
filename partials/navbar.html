@@ -1,0 +1,25 @@
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" ng-href="#!/">Quick Grade</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active" ng-show="isLoggedIn"><a ng-href="#!/profile">Profile</a></li>
+      <li><a ng-href="#">Quick Grade</a></li>
+      <li class="dropdown">
+      	<a class="dropdown-toggle" data-toggle="dropdown" ng-href="#">My Classes
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a ng-href="#!/">Calculus II</a></li>
+          <li><a ng-href="#!/">Biology 101</a></li>
+          <li><a ng-href="#!/">History 220</a></li>
+        </ul>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+    		<!-- ng-model for text -->
+      <li><a ng-href="#!/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li><a ng-href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-app="MyApp">
+<head>
+	<title>Quick Grade</title>
+
+	<link rel="stylesheet" type="text/css" href="css/navbar-footer.css">
+	<link rel="stylesheet" type="text/css" href="lib/node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="lib/node_modules/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+<!--Navbar -->
+<div ng-include="'partials/navbar.html'"></div>
+
+
+<div ng-view></div>
+
+
+
+<!-- Sticky Footer -->
+<div ng-include="'partials/footer.html'"></div>
+
+
+
+
+
+<!-- Dependencies -->
+<script type="text/javascript" src="lib/node_modules/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="lib/node_modules/firebase/firebase.js"></script>
+<script type="text/javascript" src="lib/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="lib/node_modules/angular/angular.min.js"></script>
+<script type="text/javascript" src="lib/node_modules/angular-route/angular-route.min.js"></script>
+<script type="text/javascript" src="lib/node_modules/angularfire/dist/angularfire.min.js"></script>
+
+<!-- App -->
+<script type="text/javascript" src="app/app.js"></script>
+<!-- Values -->
+<script type="text/javascript" src="app/values/fb-creds.js"></script>
+<!-- Factories -->
+<script type="text/javascript" src="app/factories/AuthFactory.js"></script>
+<!-- Controllers -->
+<script type="text/javascript" src="app/controllers/UserCtrl.js"></script>
+</body>
+</html>
