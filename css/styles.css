@@ -1,32 +1,40 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**********/
+/* MODALS */
+/**********/
+
 #login-modal-body{
 	margin: 0 1%;
 }
-
-
+/* Center Modal Headers */
 .form-group h4{
 	text-align: center;
 }
-
+/* Add line height to modals */
 .form-group div{
 	line-height: 2em;
 }
 
+/* Dark Modal Theme */
 .modal-header{
 	background-color:  #080808;
 	color: #9d9d9d;
 }
-
-.vertical-alignment-helper {
-    display:table;
-    height: 100%;
-    width: 100%;
-    margin-left: 50%;
-    margin-right: 50%;
-    pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
-}
-.vertical-align-center {
-    /* To center vertically */
-    display: table-cell;
-    vertical-align: middle;
-    pointer-events:none;
+/* Centers the Google Login button*/
+#login-google-btn{
+	text-align: center;
 }

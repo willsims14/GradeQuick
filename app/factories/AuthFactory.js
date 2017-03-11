@@ -1,12 +1,10 @@
 "use strict";
 
-app.factory("AuthFactory", function(){
-
-	console.log("AUTH FACTORY");
-
+app.factory("AuthFactory", function(FBCreds, $q, $http){
 	let currentUser = null;
 
 	let createUser = function(userObj){
+		console.log("Creating User: ", userObj);
 		return firebase.auth().createUserWithEmailAndPassword(userObj.email, userObj.password)
 		.catch( function(error){
 			let errorCode = error.code;
@@ -16,6 +14,7 @@ app.factory("AuthFactory", function(){
 	};
 
 	let loginUser = function(userObj) {
+		console.log("Logging in User: ", userObj);
 		return firebase.auth().signInWithEmailAndPassword(userObj.email, userObj.password)
 		.catch( function(error){
 			let errorCode = error.code;
@@ -25,7 +24,7 @@ app.factory("AuthFactory", function(){
 	};
 
 	let logoutUser = function(){
-		console.log("logoutUser");
+		console.log("LOGGED OUT");
 		return firebase.auth().signOut();
 	};
 
@@ -55,6 +54,57 @@ app.factory("AuthFactory", function(){
     	return firebase.auth().signInWithPopup(provider);
   	};
 
-	return {createUser, loginUser, logoutUser, isAuthenticated, getUser, authWithProvider};
+	/*******************************************************/
+	/******* User Profiles *********************************/
+	/*******************************************************/
+
+  	// Retrieves record from database/users.json 
+	let getUserProfile = function(userId){
+		console.log("UserID: ", userId);
+		return $q((resolve, reject) => {
+			$http.get(`${FBCreds.databaseURL}/users.json?orderBy="userId"&equalTo="${userId}"`)
+			.then((userObject) => {
+				console.log("FACTORY: ", userObject);
+				resolve(userObject.data);
+			})
+			.catch((error) => {
+				console.log("Error");
+				reject(error);
+			});
+		});
+	};
+
+	let checkUserHasProfile = function(userId){
+		return $q((resolve, reject) => {
+			$http.get(`${FBCreds.databaseURL}/users.json?orderBy="userId"&equalTo="${userId}"`)
+			.then( (userObject) => {
+				console.log("UserObject: ", userObject);
+				var userObjLength = Object.keys(userObject.data).length;
+				if(userObjLength === 1){
+					resolve(true);
+				}
+				resolve(false);
+			})
+			.catch((error) => {
+				reject(error);
+			});
+		});
+	};
+
+	// Adds record to database/users.json 
+	let createUserProfile = function(profile){
+		return $q((resolve, reject) => {
+			$http.post(`${FBCreds.databaseURL}/users.json`, JSON.stringify(profile))
+			.then((ObjectFromFirebase) => {
+				resolve(ObjectFromFirebase);
+			}).catch((error) => {
+				reject(error);
+			});
+		});
+	};
+
+
+
+	return {createUserProfile, checkUserHasProfile, getUserProfile, createUser, loginUser, logoutUser, isAuthenticated, getUser, authWithProvider};
 
 });
