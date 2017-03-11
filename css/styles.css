@@ -1,0 +1,32 @@
+#login-modal-body{
+	margin: 0 1%;
+}
+
+
+.form-group h4{
+	text-align: center;
+}
+
+.form-group div{
+	line-height: 2em;
+}
+
+.modal-header{
+	background-color:  #080808;
+	color: #9d9d9d;
+}
+
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+    margin-left: 50%;
+    margin-right: 50%;
+    pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
+}
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events:none;
+}
