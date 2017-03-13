@@ -1,0 +1,27 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="newCourseModal">
+      <div class="modal-dialog modal-sm" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" ng-model="header">New Course</h4>
+          </div>
+          <div class="modal-body" >
+            <section class="form-group">
+              <h4>Create your course</h4>
+              <div>
+                Course Name: <input class="form-control" type="text" autofocus="true"  ng-model="course.name" ng-focus="true">
+                Course Description: <input class="form-control" type="text" ng-model="course.desc"><br>
+                Course Grading Style: 
+                <select>
+                  <option>Percentage</option>
+                  <option>Total Points</option>
+                </select>
+              </div> 
+            </section>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary"  data-dismiss="modal" ng-click="createCourse()">Add Course</button>
+            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+      </div>
+    </div>

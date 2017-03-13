@@ -15,19 +15,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 
 
 	let currentUser = AuthFactory.getUser();
-
-	console.log("$Scope.user: ", $scope.user);
-
-	// Wrote function as IIFE so that a logout
-	//		occurs immediately upon load
-	let logout = ( function(){
-		AuthFactory.logoutUser()
-		.then(function(data){
-			$window.location.url = "/login";
-		}, function(error){
-			console.log("error occured on logout");
-		});
-	})();
+	$scope.user = "";
 
 	// When user logs in/out, change isLoggedIn value
 	firebase.auth().onAuthStateChanged( function(user){
@@ -40,6 +28,18 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 			}
 		});
 	});
+
+	// Wrote function as IIFE so that a logout
+	//		occurs immediately upon load
+	let logout = ( function(){
+		AuthFactory.logoutUser()
+		.then(function(data){
+			$window.location.href = "#!/login";
+		}, function(error){
+			console.log("error occured on logout");
+		});
+	})();
+
 
 	// Opens modal for user to login
     $scope.openLoginModal = function(){
@@ -83,7 +83,6 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 		.then(function(validatedUser) {
 			$scope.account.userId = validatedUser.user.uid;
 			$scope.user = validatedUser.user.uid;
-			currentUser = $scope.user;
 			console.log("CurrentUser: ", $scope.user);
 			// If user does not have a profile, make one
 			AuthFactory.checkUserHasProfile(validatedUser.user.uid)
@@ -93,13 +92,13 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 						name: validatedUser.user.displayName,
 						email: validatedUser.user.email,
 						profilePicture: validatedUser.user.photoURL,
-						userId: validatedUser.user.uid
+						userId: AuthFactory.getUser()
 					};
 
 					AuthFactory.createUserProfile(newUser)
 					.then( function(x){
 						console.log("x: ", x);
-			    		$window.location.href = `#!/${x.data.name}`;
+			    		$window.location.href = `#!/${newUser.userId}`;
 					});
 				}else{
 					console.log("Welcome Back ", validatedUser.user.displayName);
@@ -121,7 +120,8 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 	      email: $scope.account.email,
 	      password: $scope.account.password,
 	      name: $scope.account.name,
-	      school: $scope.account.school
+	      school: $scope.account.school,
+	      userId: null
 	    };
 
 	    // Create register new authenticated user
@@ -134,8 +134,8 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 	      		$scope.$apply();
 	      		return;
 	    	}else{
-	    		newUser.userId = userData.uid;
 	    		// Create new user PROFILE
+	    		newUser.userId = userData.uid;
 				AuthFactory.createUserProfile(newUser)
 				.then( function(newUser){
 					console.log("NewUserProfile: ", newUser);
@@ -154,6 +154,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 
   	// Why do I have to do this?
   	$scope.goToUserProfile = function(){
+  		console.log("$Scope.user: ", $scope.user);
 		$scope.user = AuthFactory.getUser();
   	};
 

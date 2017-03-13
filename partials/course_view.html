@@ -1,0 +1,6 @@
+<h3>My Courses</h3>
+<div>
+	<ul ng-repeat="course in courses">
+		<li><a href="#!/courses/{{course.id}}" ng-click="x(course.id)">{{course.name}}</a> <button class="btn btn-sm btn-danger" ng-click="courseDelete(course.id)"><span class="glyphicon glyphicon-trash"></span></button></li>
+	</ul>	
+</div>
