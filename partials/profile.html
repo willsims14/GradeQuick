@@ -1,11 +1,13 @@
-<h1 >Profile</h1>
-<h3>Hello, {{account.name}}</h3>
+<div>
+	<h1 >Profile</h1>
+	<h3>Hello, {{account.name}}</h3>
+	<hr>
 
-<hr>
-
-	
-
-
-<div id="profile-buttons">
-	<button type="button" class="btn btn-default" ng-href="#">Create New Course</button><br>
+	<!-- Course View -->
+	<div ng-include="'partials/course_view.html'"></div>
+	<div ng-include="'partials/MODAL_newCourse.html'"></div>
+		
+	<div id="profile-buttons">
+		<button type="button" class="btn btn-default" ng-click="openNewCourseModal()">Create New Course</button><br>
+	</div>
 </div>

@@ -24,7 +24,6 @@ app.factory("AuthFactory", function(FBCreds, $q, $http){
 	};
 
 	let logoutUser = function(){
-		console.log("LOGGED OUT");
 		return firebase.auth().signOut();
 	};
 
