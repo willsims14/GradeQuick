@@ -68,9 +68,9 @@ app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeS
     	});
     };
 
-    $scope.x = function(y){
-    	console.log("X: ", y);
-    };
+    // $scope.x = function(y){
+    // 	console.log("X: ", y);
+    // };
 
 
 	

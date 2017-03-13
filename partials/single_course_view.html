@@ -2,7 +2,8 @@
 
 <div>
 	<ul ng-repeat="ass in assignments">
-		<li><strong>{{ass.name}}</strong>: {{ass.pointsEarned}}/{{ass.possiblePoints}}<button class="btn btn-sm btn-secondary" ng-click="deleteAssignment(ass.id)">Delete</button></li>
+		<li><strong>{{ass.name}}</strong>: {{ass.pointsEarned}}/{{ass.possiblePoints}}<button class="btn btn-sm btn-secondary" ng-click="showNewGradeField()" ng-show="!enteringGrade">Enter Grade</button><button class="btn btn-sm btn-danger" ng-click="deleteAssignment(ass.id)" ng-show="!enteringGrade">Delete</button></li>
+		<li ng-show="enteringGrade"><input type="number" ng-model="assignments.newGrade"><button class="btn btn-sm btn-primary" ng-click="recordNewGrade(ass)">Submit</button><button class="btn btn-sm btn-secondary" ng-click="cancel()">Cancel</button>
 	</ul>
 </div>
 

@@ -67,11 +67,9 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 			.then((assignmentsObj) => {
 				let assCollection = assignmentsObj.data;
 				Object.keys(assCollection).forEach((key) => {
-					console.log("Ass[i]: ", assCollection[key]);
 					assCollection[key].id = key;
 					assignments.push(assCollection[key]);
 				});
-				console.log("ITEMS: ", assignments);
 				resolve(assignments);
 			})
 			.catch((error) => {
@@ -100,10 +98,25 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 		});
 	};
 
+	let recordNewGrade = function(assId, editedAssignment){
+
+		return $q(function(resolve, reject){
+			$http.patch(`${FBCreds.databaseURL}/assignments/${assId}.json`, 
+				angular.toJson(editedAssignment))
+			.then( function(ObjectFromFirebase){
+				resolve(ObjectFromFirebase);
+			})
+			.catch( function(error){
+				reject(error);
+			});
+		});
+
+	};
 
 
 
 
 
-	return {deleteCourse, getUserCourses, addUserCourse, getCourseAssignments, addNewAssignment, deleteAssignment};
+
+	return {deleteCourse, getUserCourses, addUserCourse, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade};
 });

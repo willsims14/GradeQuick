@@ -2,9 +2,15 @@
 
 app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $routeParams){
 
+	// Scope Variables
+	$scope.enteringGrade = false;
+	// $scope.newGrade;
+	$scope.newAssignment = {};
+	$scope.newGrade = {};
+
+	// Local Variables
 	var selectedCourse = $routeParams.courseId;
 	var user = AuthFactory.getUser();
-	$scope.newAssignment = {};
 
 
 	GradeStorage.getCourseAssignments(selectedCourse)
@@ -60,6 +66,32 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 			});
 		});
 
+	};
+
+	$scope.showNewGradeField = function(){
+		$scope.enteringGrade = true;
+	};
+
+	$scope.recordNewGrade = function(assignment){
+		var newGrade = $scope.assignments.newGrade;
+		var assId = assignment.id;
+		// Delete new grade object from $scope once its retrieved
+		delete $scope.assignments.newGrade;
+		assignment.pointsEarned = newGrade;
+		GradeStorage.recordNewGrade(assId, assignment)
+		.then( function(x){
+			console.log("X: ", x);
+
+			GradeStorage.getCourseAssignments(selectedCourse)
+			.then( function(assignments){
+				$scope.assignments = assignments;
+			});
+			
+		});
+	};
+
+	$scope.cancel = function(){
+		$scope.enteringGrade = false;
 	};
 
 

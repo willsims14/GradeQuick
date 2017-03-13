@@ -24,7 +24,7 @@ app.config(function($routeProvider){
         resolve:{isAuth}
     }).
     when('/courses/:courseId', {
-        templateUrl: 'partials/single_course_view',
+        templateUrl: 'partials/single_course_view.html',
         controller: 'SingleCourseCtrl',
         resolve: {isAuth}
     }).
