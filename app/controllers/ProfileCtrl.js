@@ -9,13 +9,22 @@
 
 app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory){
 	// Get userId from URL 
-	$scope.userId = $routeParams.userId;
+	var myParams = $routeParams;
+	$scope.userId = myParams.userId;
+
+	console.log("PROFILE CTRL");
+
 	// Get user information to display on profile
 	AuthFactory.getUserProfile($scope.userId)
 	.then( function(userProfile){
-		console.log("UserProfile: ", userProfile);
+		console.log("PROFILE: ", userProfile);
 		// Set the returned user profile equal to $scope.account
 		$scope.account = Object.values(userProfile)[0];
 	});
+
+
+	
+
+
 
 });

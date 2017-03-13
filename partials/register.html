@@ -1,1 +1,27 @@
-<h1>Register</h1>
+<div class="modal fade" tabindex="-1" role="dialog" id="registerModal" ng-controller="UserCtrl">
+      <div class="modal-dialog modal-md" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" ng-model="header">Register</h4>
+          </div>
+          <div class="modal-body" >
+            <section class="form-group">
+              <h4>Welcome!</h4>
+              <div id="register-input-fields">
+              	Name: <input id="register-name-field" class="form-control login-input" type="text" ng-model="account.name">
+              	School: <input id="register-school-field" class="form-control login-input" type="text" ng-model="account.school">
+                Email: <input id="register-email-field" class="form-control login-input" type="text" autofocus="true"  ng-model="account.email" ng-focus="true">
+                <div class="alert alert-warning" ng-show="emailAlreadyUsed">
+  					<strong>Whoops!</strong> Email is already in use
+				</div>
+                Password: <input id="register-password-field" class="form-control login-input" type="password" ng-model="account.password">
+              </div> 
+            </section>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary"  ng-click="registerNewUser()">Sign Up</button>
+            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+      </div>
+    </div>

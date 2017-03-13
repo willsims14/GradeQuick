@@ -9,7 +9,7 @@ app.factory("AuthFactory", function(FBCreds, $q, $http){
 		.catch( function(error){
 			let errorCode = error.code;
 			let errorMessage = error.message;
-			console.log("error:", errorCode, errorMessage);
+			return error;
 		});
 	};
 
@@ -30,7 +30,6 @@ app.factory("AuthFactory", function(FBCreds, $q, $http){
 
 
 	let isAuthenticated = function (){
-		console.log("AuthFactory: isAuthenticated");
 		return new Promise ( (resolve, reject) => {
 			firebase.auth().onAuthStateChanged( (user) => {
 				if (user){
@@ -60,11 +59,9 @@ app.factory("AuthFactory", function(FBCreds, $q, $http){
 
   	// Retrieves record from database/users.json 
 	let getUserProfile = function(userId){
-		console.log("UserID: ", userId);
 		return $q((resolve, reject) => {
 			$http.get(`${FBCreds.databaseURL}/users.json?orderBy="userId"&equalTo="${userId}"`)
 			.then((userObject) => {
-				console.log("FACTORY: ", userObject);
 				resolve(userObject.data);
 			})
 			.catch((error) => {
@@ -78,7 +75,6 @@ app.factory("AuthFactory", function(FBCreds, $q, $http){
 		return $q((resolve, reject) => {
 			$http.get(`${FBCreds.databaseURL}/users.json?orderBy="userId"&equalTo="${userId}"`)
 			.then( (userObject) => {
-				console.log("UserObject: ", userObject);
 				var userObjLength = Object.keys(userObject.data).length;
 				if(userObjLength === 1){
 					resolve(true);
