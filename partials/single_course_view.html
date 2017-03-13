@@ -1,2 +1,12 @@
 <h1>Single Course</h1>
 
+<div>
+	<ul ng-repeat="ass in assignments">
+		<li><strong>{{ass.name}}</strong>: {{ass.pointsEarned}}/{{ass.possiblePoints}}<button class="btn btn-sm btn-secondary" ng-click="deleteAssignment(ass.id)">Delete</button></li>
+	</ul>
+</div>
+
+<button class="btn btn-primary" ng-click="openNewAssignmentModal()">New Assignment</button>
+
+<div ng-include="'partials/MODAL_newAssignment.html'"></div>
+

@@ -2,6 +2,10 @@
 
 app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 
+/*************************/
+/****** Courses ******/
+/*************************/
+
 	// Retrieves all boards (for the logged in user)
 	let getUserCourses = () => {
 		let courses = [];
@@ -50,10 +54,56 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 	};
 
 
+/*************************/
+/****** Assignments ******/
+/*************************/
+
+	let getCourseAssignments = function(courseId){
+		let assignments = [];
+		let user = AuthFactory.getUser();
+
+		return $q((resolve, reject) => {
+			$http.get(`${FBCreds.databaseURL}/assignments.json?orderBy="courseId"&equalTo="${courseId}"`)
+			.then((assignmentsObj) => {
+				let assCollection = assignmentsObj.data;
+				Object.keys(assCollection).forEach((key) => {
+					console.log("Ass[i]: ", assCollection[key]);
+					assCollection[key].id = key;
+					assignments.push(assCollection[key]);
+				});
+				console.log("ITEMS: ", assignments);
+				resolve(assignments);
+			})
+			.catch((error) => {
+				reject(error);
+			});
+		});
+	};
+
+	let addNewAssignment = function(assignment){
+		return $q((resolve, reject) => {
+			$http.post(`${FBCreds.databaseURL}/assignments.json`, JSON.stringify(assignment))
+			.then((ObjectFromFirebase) => {
+				resolve(ObjectFromFirebase);
+			}).catch((error) => {
+				reject(error);
+			});
+		});
+	};
+
+	let deleteAssignment = function(assignmentId){
+		return $q((resolve, reject) => {
+			$http.delete(`${FBCreds.databaseURL}/assignments/${assignmentId}.json`)
+			.then((objectFromFirebase) => {
+				resolve(objectFromFirebase);
+			});
+		});
+	};
 
 
 
 
 
-	return {deleteCourse, getUserCourses, addUserCourse};
+
+	return {deleteCourse, getUserCourses, addUserCourse, getCourseAssignments, addNewAssignment, deleteAssignment};
 });
