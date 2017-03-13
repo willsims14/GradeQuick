@@ -6,10 +6,17 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 	$scope.account = {
 		name: "",
 		email: "",
-		password: ""
+		password: "",
+		userId: ""
 	};
 	$scope.header = "";
 	$scope.btnText = ""; 
+	$scope.emailAlreadyUsed = false;
+
+
+	let currentUser = AuthFactory.getUser();
+
+	console.log("$Scope.user: ", $scope.user);
 
 	// Wrote function as IIFE so that a logout
 	//		occurs immediately upon load
@@ -22,6 +29,18 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 		});
 	})();
 
+	// When user logs in/out, change isLoggedIn value
+	firebase.auth().onAuthStateChanged( function(user){
+		firebase.auth().onAuthStateChanged( function(user){
+			if(user){
+				$scope.isLoggedIn = true;
+			}else{
+				$scope.isLoggedIn = false;
+				$window.location.href = "#!/login";
+			}
+		});
+	});
+
 	// Opens modal for user to login
     $scope.openLoginModal = function(){
     	// Forces first input of modal to get focus
@@ -30,17 +49,24 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 		});
 		// Show login modal window
         $('#loginModal').modal('show');
-
-
     };
 
-    // Allows user to hit enter to submit login modal
-    $(".login-input").keypress( function(event){
-    	if(event.keyCode === 13){
-    		$scope.loginUser();
-	        $('#loginModal').modal('hide');
-    	}
-    });
+    $scope.openRegisterModal = function(){
+    	// Forces first input of modal to get focus
+    	$('.modal').on('shown.bs.modal', function() {
+  			$(this).find('[autofocus]').focus();
+		});
+		// Show login modal window
+        $('#registerModal').modal('show');
+    };
+
+    // // Allows user to hit enter to submit login modal
+    // $(".login-input").keypress( function(event){
+    // 	if(event.keyCode === 13){
+    // 		$scope.loginUser();
+	   //      $('#loginModal').modal('hide');
+    // 	}
+    // });
 
     // Login in user (not using Google account)
     $scope.loginUser = function(){
@@ -52,10 +78,13 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
     };
     // Logs in user using his/her Google account
 	$scope.loginGoogle = function() {
+        $('#loginModal').modal('hide');
 		AuthFactory.authWithProvider()
 		.then(function(validatedUser) {
-			console.log("ValidatedUser: ", validatedUser);
-
+			$scope.account.userId = validatedUser.user.uid;
+			$scope.user = validatedUser.user.uid;
+			currentUser = $scope.user;
+			console.log("CurrentUser: ", $scope.user);
 			// If user does not have a profile, make one
 			AuthFactory.checkUserHasProfile(validatedUser.user.uid)
 			.then( function(userExists){
@@ -66,6 +95,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 						profilePicture: validatedUser.user.photoURL,
 						userId: validatedUser.user.uid
 					};
+
 					AuthFactory.createUserProfile(newUser)
 					.then( function(x){
 						console.log("x: ", x);
@@ -75,11 +105,57 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 					console.log("Welcome Back ", validatedUser.user.displayName);
 		    		$window.location.href = `#!/${validatedUser.user.uid}`;
 				}
-		        $('#loginModal').modal('hide');
+
 			});
     		$window.location.href = `#!/${validatedUser.uid}`;
 	  	}).catch(function(error) {
 	    	console.log("error with google login", error);
 	  	});
 	};
+	
+
+	$scope.registerNewUser = () => {
+    	console.log("Registering User: ", $scope.account);
+  		$scope.emailAlreadyUsed = false;
+		var newUser = {
+	      email: $scope.account.email,
+	      password: $scope.account.password,
+	      name: $scope.account.name,
+	      school: $scope.account.school
+	    };
+
+	    // Create register new authenticated user
+	    AuthFactory.createUser(newUser)
+	    .then( (userData) => {
+	      	console.log("UserCtrl newUser:", userData );
+	      	if(userData.code === "auth/email-already-in-use"){
+	      		console.log("------------------------");
+	      		$scope.emailAlreadyUsed = true;
+	      		$scope.$apply();
+	      		return;
+	    	}else{
+	    		newUser.userId = userData.uid;
+	    		// Create new user PROFILE
+				AuthFactory.createUserProfile(newUser)
+				.then( function(newUser){
+					console.log("NewUserProfile: ", newUser);
+		    		$window.location.href = `#!/${newUser.data.name}`;
+		      		$('#registerModal').modal('hide');
+		      		$scope.loginUser();
+				});
+	  	}
+	    }, (error) => {
+	        console.log("Error creating user:", error);
+	    })
+	    .catch( function(error){
+	    	console.log("Error: ", error);
+	    });
+  	};
+
+  	// Why do I have to do this?
+  	$scope.goToUserProfile = function(){
+		$scope.user = AuthFactory.getUser();
+  	};
+
+
 });

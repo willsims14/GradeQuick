@@ -1,6 +1,6 @@
 "use strict";
 
-var app = angular.module("MyApp", ['ngRoute', 'ui.bootstrap']);
+var app = angular.module("MyApp", ['ngRoute']);
 
 let isAuth = (AuthFactory) => new Promise ( (resolve, reject) => {
     AuthFactory.isAuthenticated()
@@ -23,10 +23,6 @@ app.config(function($routeProvider){
     	templateUrl: 'partials/profile.html',
     	controller: 'ProfileCtrl',
         resolve:{isAuth}
-    }).
-    when('/register', {
-    	templateUrl: 'partials/register.html',
-    	controller: 'UserCtrl'
     }).
     otherwise('/');
 });
