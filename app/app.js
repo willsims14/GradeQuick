@@ -16,7 +16,8 @@ let isAuth = (AuthFactory) => new Promise ( (resolve, reject) => {
 app.config(function($routeProvider){
     $routeProvider.
     when('/', {
-        controller: 'UserCtrl'
+        controller: 'UserCtrl',
+        templateUrl: 'partials/splash_page.html'
     }).
     when('/:userId', {
     	templateUrl: 'partials/profile.html',

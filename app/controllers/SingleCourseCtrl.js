@@ -6,7 +6,6 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 	$scope.enteringGrade = false;
 	// $scope.newGrade;
 	$scope.newAssignment = {};
-	$scope.newGrade = {};
 
 	// Local Variables
 	var selectedCourse = $routeParams.courseId;
@@ -18,8 +17,6 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 		$scope.assignments = assignments;
 	});
 
-
-
 	$scope.openNewAssignmentModal = function(){
     	// Forces first input of modal to get focus
     	$('.modal').on('shown.bs.modal', function() {
@@ -28,8 +25,6 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 		// Show login modal window
         $('#newAssignmentModal').modal('show');
 	};
-
-
 
 	$scope.createAssignment = function(){
 		$scope.newAssignment.courseId = selectedCourse;
@@ -56,8 +51,6 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 	};
 
 	$scope.deleteAssignment = function(assId){
-		console.log("DELETING: ", assId);
-
 		GradeStorage.deleteAssignment(assId)
 		.then( function(){
 			GradeStorage.getCourseAssignments(selectedCourse)
@@ -68,32 +61,29 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 
 	};
 
-	$scope.showNewGradeField = function(){
+	// Shows input field for entering a new grade
+	$scope.showNewGradeField = function(assignment){
+        $scope.assignmentToUpdate = assignment;
 		$scope.enteringGrade = true;
 	};
 
-	$scope.recordNewGrade = function(assignment){
-		var newGrade = $scope.assignments.newGrade;
-		var assId = assignment.id;
-		// Delete new grade object from $scope once its retrieved
-		delete $scope.assignments.newGrade;
-		assignment.pointsEarned = newGrade;
-		GradeStorage.recordNewGrade(assId, assignment)
-		.then( function(x){
-			console.log("X: ", x);
+	// Makes call to firebase to update a grade on an assignment
+    $scope.updateGrade = function(){
+        var updatedAssignment = $scope.assignmentToUpdate;
+        updatedAssignment.pointsEarned = $scope.updatedGrade;
 
-			GradeStorage.getCourseAssignments(selectedCourse)
-			.then( function(assignments){
-				$scope.assignments = assignments;
-			});
-			
-		});
-	};
+        GradeStorage.recordNewGrade(updatedAssignment.id, updatedAssignment)
+        .then( function(x){
+        	console.log("POSTED GRADE: ", x);
+			$scope.enteringGrade = false;
+        		GradeStorage.getCourseAssignments(selectedCourse)
+				.then( function(assignments){
+					$scope.assignments = assignments;
+				});
+        });
 
-	$scope.cancel = function(){
-		$scope.enteringGrade = false;
-	};
 
+    };
 
 
 });
