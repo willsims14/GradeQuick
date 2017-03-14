@@ -8,8 +8,27 @@
 	text-align: center;
 }
 
+/* Splash Page Styling */
+#splash-container{
+	/*margin: 0 5%;*/
+	/*width: 50%;*/
 
+}
+#x{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
 
+#splash-login-container{
+	border: 2px solid grey;
+	padding: 10px 30px 30px 30px;
+	background-color: #fff;
+}
+
+.myBody{
+	background-color: #24292e;
+}
 
 
 

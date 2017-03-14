@@ -68,9 +68,13 @@ app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeS
     	});
     };
 
-    // $scope.x = function(y){
-    // 	console.log("X: ", y);
-    // };
+    $scope.updateGrade = function(){
+        console.log("CLICKED");
+        var newGrade = $scope.updatedGrade;
+
+        console.log("New Grade: ", newGrade);
+        console.log("$Scope: ", $scope.updateGrade);
+    };
 
 
 	

@@ -22,9 +22,10 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 		firebase.auth().onAuthStateChanged( function(user){
 			if(user){
 				$scope.isLoggedIn = true;
+
 			}else{
 				$scope.isLoggedIn = false;
-				$window.location.href = "#!/login";
+				// $window.location.href = "#!/login";
 			}
 		});
 	});
@@ -34,7 +35,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 	let logout = ( function(){
 		AuthFactory.logoutUser()
 		.then(function(data){
-			$window.location.href = "#!/login";
+			// $window.location.href = "#!/login";
 		}, function(error){
 			console.log("error occured on logout");
 		});
@@ -84,6 +85,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 			$scope.account.userId = validatedUser.user.uid;
 			$scope.user = validatedUser.user.uid;
 			console.log("CurrentUser: ", $scope.user);
+
 			// If user does not have a profile, make one
 			AuthFactory.checkUserHasProfile(validatedUser.user.uid)
 			.then( function(userExists){
@@ -104,6 +106,8 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 					console.log("Welcome Back ", validatedUser.user.displayName);
 		    		$window.location.href = `#!/${validatedUser.user.uid}`;
 				}
+
+
 
 			});
     		$window.location.href = `#!/${validatedUser.uid}`;
