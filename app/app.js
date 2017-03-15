@@ -1,6 +1,6 @@
 "use strict";
 
-var app = angular.module("MyApp", ['ngRoute']);
+var app = angular.module("MyApp", ['ngRoute', 'ui.bootstrap']);
 
 let isAuth = (AuthFactory) => new Promise ( (resolve, reject) => {
     AuthFactory.isAuthenticated()
