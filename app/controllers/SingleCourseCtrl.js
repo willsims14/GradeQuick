@@ -6,17 +6,21 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 	$scope.enteringGrade = false;
 	// $scope.newGrade;
 	$scope.newAssignment = {};
+	// For dropown under header
+	$scope.styles = ["Cumulative Average", "Weighted Average"];
 
+	$scope.assignments = [];
 	// Local Variables
 	var selectedCourse = $routeParams.courseId;
 	var user = AuthFactory.getUser();
 
-
 	GradeStorage.getCourseAssignments(selectedCourse)
 	.then( function(assignments){
 		$scope.assignments = assignments;
+		$scope.recalculate();
 	});
 
+	// Open modal for a new assignment
 	$scope.openNewAssignmentModal = function(){
     	// Forces first input of modal to get focus
     	$('.modal').on('shown.bs.modal', function() {
@@ -26,10 +30,17 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
         $('#newAssignmentModal').modal('show');
 	};
 
+	// Creates a new asignment
 	$scope.createAssignment = function(){
 		$scope.newAssignment.courseId = selectedCourse;
 		$scope.newAssignment.userId = user;
 		console.log("NEW ASSIGNMENT: ", $scope.newAssignment);
+
+		if($scope.newAssignment.pointsEarned > $scope.newAssignment.possiblePoints){
+			console.log("CANT EARN MORE POINTS THAN POSSIBLE");
+			// ALERT USER HERE
+			return;
+		}
 
 		if($scope.newAssignment.pointsEarned){
 			console.log("POINTS WERE EARNED: ", $scope.newAssignment.pointsEarned);
@@ -38,15 +49,15 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 		}
 
 		GradeStorage.addNewAssignment($scope.newAssignment)
-		.then( function(x){
+		.then( function(){
 			GradeStorage.getCourseAssignments(selectedCourse)
 			.then( function(assignments){
 				$scope.assignments = assignments;
+				$scope.recalculate();
 			});			
 		}).catch( function(error){
 			console.log("ERROR: ", error);
 		});
-
 		$scope.newAssignment = {};
 	};
 
@@ -56,9 +67,9 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 			GradeStorage.getCourseAssignments(selectedCourse)
 			.then( function(assignments){
 				$scope.assignments = assignments;
+				$scope.recalculate();
 			});
 		});
-
 	};
 
 	// Shows input field for entering a new grade
@@ -72,18 +83,40 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
         var updatedAssignment = $scope.assignmentToUpdate;
         updatedAssignment.pointsEarned = $scope.updatedGrade;
 
+        if(updatedAssignment.pointsEarned > updatedAssignment.possiblePoints){
+			console.log("CANT EARN MORE POINTS THAN POSSIBLE");
+			$("#new-grade-btn").html(" ");
+			return;
+        }
+
         GradeStorage.recordNewGrade(updatedAssignment.id, updatedAssignment)
-        .then( function(x){
-        	console.log("POSTED GRADE: ", x);
+        .then( function(){
 			$scope.enteringGrade = false;
-        		GradeStorage.getCourseAssignments(selectedCourse)
-				.then( function(assignments){
-					$scope.assignments = assignments;
-				});
+        	GradeStorage.getCourseAssignments(selectedCourse)
+			.then( function(assignments){
+				$("#new-grade-btn").val(" ");
+				$scope.assignments = assignments;
+				$scope.recalculate();
+			});
         });
+    };
+    
 
+    $scope.recalculate = function(){
+		var finalGrade = 0.0;
 
+		if($scope.selectedGradeStyle === "Cumulative Average"){
+			finalGrade = GradeStorage.calcCumulativeAvg($scope.assignments);
+			$scope.finalGrade = finalGrade.toFixed(2) + "%";
+		}else if($scope.selectedGradeStyle === "Weighted Average"){
+			finalGrade = GradeStorage.calcWeightedAvg($scope.assignments);
+			$scope.finalGrade = finalGrade.toFixed(2) + "%";
+		}else{
+			console.log("ELSE OCCURRED");
+		}
     };
 
 
 });
+
+

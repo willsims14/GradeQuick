@@ -1,5 +1,8 @@
 <h1>Single Course</h1>
+<select ng-init="selectedGradeStyle = styles[0]" ng-model="selectedGradeStyle" ng-options="style for style in styles" ng-change="recalculate()">
 
+</select>
+<br>
 <div>
 	<ul ng-repeat="ass in assignments">
 		<li><strong>{{ass.name}}</strong>: {{ass.pointsEarned}}/{{ass.possiblePoints}}<button class="btn btn-sm btn-secondary" ng-click="showNewGradeField(ass)" ng-show="!enteringGrade">Enter Grade</button><button class="btn btn-sm btn-danger" ng-click="deleteAssignment(ass.id)" ng-show="!enteringGrade">Delete</button></li>
@@ -7,10 +10,11 @@
 	</ul>
 </div>
 <div>
-<input type="number" ng-model="updatedGrade" ng-show="enteringGrade" placeholder="New Grade">
-<button ng-show="enteringGrade" ng-click="updateGrade()"><span class="glyphicon glyphicon-check" ></span></button>
+<input id="new-grade-btn" type="number" ng-model="updatedGrade" ng-show="enteringGrade" placeholder="New Grade">
+<button  ng-show="enteringGrade" ng-click="updateGrade()"><span class="glyphicon glyphicon-check" ></span></button>
 </div>
 
+<h2 >Final Grade: {{finalGrade}} </h2>
 
 <button class="btn btn-primary" ng-click="openNewAssignmentModal()">New Assignment</button>
 
