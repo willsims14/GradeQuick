@@ -27,7 +27,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeS
 		console.log("Courses: ", $scope.courses);
 	});
 
-		// Opens modal for user to login
+	// Opens modal for user to login
     $scope.openNewCourseModal = function(){
     	console.log("OPEN MODAL");
     	// Forces first input of modal to get focus
@@ -75,10 +75,4 @@ app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeS
         console.log("New Grade: ", newGrade);
         console.log("$Scope: ", $scope.updateGrade);
     };
-
-
-	
-
-
-
 });

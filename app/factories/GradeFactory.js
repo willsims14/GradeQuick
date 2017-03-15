@@ -113,10 +113,55 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 
 	};
 
+/************************************/
+/******  Modular Calculations  ******/
+/****** with NO $http requests  *****/
+/************************************/
+
+
+    function calcWeightedAvg(assignments){
+    	var numAssignments = assignments.length;
+		var totalEarnedPoints = 0.0;
+		var totalPossiblePoints = 0.0;
+    	var finalGrade = 0.0;
+    	var i;
+
+    	// Get total amount of possible points
+		for(i = 0; i < assignments.length; i++){
+			if(assignments[i].pointsEarned !== '*'){
+				totalPossiblePoints += parseInt(assignments[i].possiblePoints);
+			}
+		}
+		// Get total amount of earned points
+		for(i = 0; i < numAssignments; i++){
+			if(assignments[i].pointsEarned !== '*'){
+				totalEarnedPoints += parseInt(assignments[i].pointsEarned);
+			}
+			
+		}
+		finalGrade = ((totalEarnedPoints / totalPossiblePoints) * 100);
+		console.log("BEFORE Final: ", finalGrade);
+		return finalGrade;
+    }
+
+    function calcCumulativeAvg(assignments){
+    	var numAssignments = assignments.length;
+    	var finalGrade = 0.0;
+    	var i;
+		// Divide each assignments earned points by total possible points
+		for(i = 0; i < assignments.length; i++){
+			// If [i].pointsEarned is not a number
+			if(assignments[i].pointsEarned === '*'){
+				numAssignments--;
+			}else{
+				finalGrade += (assignments[i].pointsEarned / assignments[i].possiblePoints);
+			}
+		}
+		finalGrade = (finalGrade / numAssignments) * 100;
+		return finalGrade;
+    }
 
 
 
-
-
-	return {deleteCourse, getUserCourses, addUserCourse, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade};
+	return {deleteCourse, getUserCourses, addUserCourse, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
 });
