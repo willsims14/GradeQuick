@@ -16,19 +16,23 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 
 	$scope.user = AuthFactory.getUser();
 
+
 	// When user logs in/out, change isLoggedIn value
 	firebase.auth().onAuthStateChanged( function(user){
 		firebase.auth().onAuthStateChanged( function(user){
 			if(user){
 				$scope.isLoggedIn = true;
-
+				GradeStorage.getUserCourses()
+				.then( function(userCourses){
+					$scope.navCourses = userCourses;
+					console.log("$Scope.courses: ", $scope.navCourses);
+				});
 			}else{
 				$scope.isLoggedIn = false;
 				// $window.location.href = "#!/login";
 			}
 		});
 	});
-
 	// Wrote function as IIFE so that a logout
 	//		occurs immediately upon load
 	let logout = ( function(){
@@ -72,18 +76,11 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
     $scope.loginUser = function(){
     	AuthFactory.loginUser($scope.account)
     	.then( (validatedUser) => {
-
-			GradeStorage.getUserCourses()
-			.then( function(userCourses){
-				$scope.courses = userCourses;
-				console.log("$Scope.courses: ", $scope.courses);
-			});
-
-
     		// Using $window so modal does not remain on screen
     		$window.location.href = `#!/${validatedUser.uid}`;
     	});
     };
+
     // Logs in user using his/her Google account
 	$scope.loginGoogle = function() {
         $('#loginModal').modal('hide');
@@ -96,34 +93,23 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 			// If user does not have a profile, make one
 			AuthFactory.checkUserHasProfile(validatedUser.user.uid)
 			.then( function(userExists){
+				if(userExists === false){
+					var newUser = {
+						name: validatedUser.user.displayName,
+						email: validatedUser.user.email,
+						profilePicture: validatedUser.user.photoURL,
+						userId: AuthFactory.getUser()
+					};
 
-				GradeStorage.getUserCourses()
-				.then( function(userCourses){
-					$scope.courses = userCourses;
-					console.log("$Scope.courses: ", $scope.courses);
-
-
-					if(userExists === false){
-						var newUser = {
-							name: validatedUser.user.displayName,
-							email: validatedUser.user.email,
-							profilePicture: validatedUser.user.photoURL,
-							userId: AuthFactory.getUser()
-						};
-
-						AuthFactory.createUserProfile(newUser)
-						.then( function(x){
-							console.log("x: ", x);
-				    		$window.location.href = `#!/${newUser.userId}`;
-						});
-					}else{
-						console.log("Welcome Back ", validatedUser.user.displayName);
-			    		$window.location.href = `#!/${validatedUser.user.uid}`;
-					}
-
-				});
-
-
+					AuthFactory.createUserProfile(newUser)
+					.then( function(x){
+						console.log("x: ", x);
+			    		$window.location.href = `#!/${newUser.userId}`;
+					});
+				}else{
+					console.log("Welcome Back ", validatedUser.user.displayName);
+		    		$window.location.href = `#!/${validatedUser.user.uid}`;
+				}
 			});
     		$window.location.href = `#!/${validatedUser.uid}`;
     		$scope.$apply();
