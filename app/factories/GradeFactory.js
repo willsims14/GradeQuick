@@ -27,6 +27,24 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 		});
 	};
 
+	let getCourseName = (courseId) => {
+		let courseName = "";
+		let user = AuthFactory.getUser();
+
+		console.log("Looking For: ", courseId);
+
+		return $q((resolve, reject) => {
+			$http.get(`${FBCreds.databaseURL}/courses/${courseId}.json`)
+			.then((coursesObj) => {
+				let courseName = coursesObj.data.name;
+				resolve(courseName);
+			})
+			.catch((error) => {
+				reject(error);
+			});
+		});
+	};
+
 
 	let addUserCourse = (newCourse) => {
 		let courses = [];
@@ -163,5 +181,5 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 
 
 
-	return {deleteCourse, getUserCourses, addUserCourse, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
+	return {deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
 });

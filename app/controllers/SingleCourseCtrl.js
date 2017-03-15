@@ -14,8 +14,15 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 	var selectedCourse = $routeParams.courseId;
 	var user = AuthFactory.getUser();
 
+
+	GradeStorage.getCourseName(selectedCourse)
+	.then( function(tempCourseName){
+		$scope.courseName = tempCourseName;
+	});
+
 	GradeStorage.getCourseAssignments(selectedCourse)
 	.then( function(assignments){
+		console.log("SELECTED COURSE: ", selectedCourse);
 		$scope.assignments = assignments;
 		$scope.recalculate();
 	});
@@ -105,14 +112,18 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
     $scope.recalculate = function(){
 		var finalGrade = 0.0;
 
-		if($scope.selectedGradeStyle === "Cumulative Average"){
-			finalGrade = GradeStorage.calcCumulativeAvg($scope.assignments);
-			$scope.finalGrade = finalGrade.toFixed(2) + "%";
-		}else if($scope.selectedGradeStyle === "Weighted Average"){
-			finalGrade = GradeStorage.calcWeightedAvg($scope.assignments);
-			$scope.finalGrade = finalGrade.toFixed(2) + "%";
+		if($scope.assignments.length === 0){
+			$scope.finalGrade = "No Grades Yet!";
 		}else{
-			console.log("ELSE OCCURRED");
+			if($scope.selectedGradeStyle === "Cumulative Average"){
+				finalGrade = GradeStorage.calcCumulativeAvg($scope.assignments);
+				$scope.finalGrade = finalGrade.toFixed(2) + "%";
+			}else if($scope.selectedGradeStyle === "Weighted Average"){
+				finalGrade = GradeStorage.calcWeightedAvg($scope.assignments);
+				$scope.finalGrade = finalGrade.toFixed(2) + "%";
+			}else{
+				console.log("ELSE OCCURRED");
+			}
 		}
     };
 

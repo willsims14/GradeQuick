@@ -1,6 +1,6 @@
 "use strict";
 
-app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
+app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, GradeStorage){
 	// Scope Variables
 	$scope.isLoggedIn = false;
 	$scope.account = {
@@ -14,8 +14,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 	$scope.emailAlreadyUsed = false;
 
 
-	let currentUser = AuthFactory.getUser();
-	$scope.user = "";
+	$scope.user = AuthFactory.getUser();
 
 	// When user logs in/out, change isLoggedIn value
 	firebase.auth().onAuthStateChanged( function(user){
@@ -73,6 +72,14 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
     $scope.loginUser = function(){
     	AuthFactory.loginUser($scope.account)
     	.then( (validatedUser) => {
+
+			GradeStorage.getUserCourses()
+			.then( function(userCourses){
+				$scope.courses = userCourses;
+				console.log("$Scope.courses: ", $scope.courses);
+			});
+
+
     		// Using $window so modal does not remain on screen
     		$window.location.href = `#!/${validatedUser.uid}`;
     	});
@@ -89,28 +96,37 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory){
 			// If user does not have a profile, make one
 			AuthFactory.checkUserHasProfile(validatedUser.user.uid)
 			.then( function(userExists){
-				if(userExists === false){
-					var newUser = {
-						name: validatedUser.user.displayName,
-						email: validatedUser.user.email,
-						profilePicture: validatedUser.user.photoURL,
-						userId: AuthFactory.getUser()
-					};
 
-					AuthFactory.createUserProfile(newUser)
-					.then( function(x){
-						console.log("x: ", x);
-			    		$window.location.href = `#!/${newUser.userId}`;
-					});
-				}else{
-					console.log("Welcome Back ", validatedUser.user.displayName);
-		    		$window.location.href = `#!/${validatedUser.user.uid}`;
-				}
+				GradeStorage.getUserCourses()
+				.then( function(userCourses){
+					$scope.courses = userCourses;
+					console.log("$Scope.courses: ", $scope.courses);
 
+
+					if(userExists === false){
+						var newUser = {
+							name: validatedUser.user.displayName,
+							email: validatedUser.user.email,
+							profilePicture: validatedUser.user.photoURL,
+							userId: AuthFactory.getUser()
+						};
+
+						AuthFactory.createUserProfile(newUser)
+						.then( function(x){
+							console.log("x: ", x);
+				    		$window.location.href = `#!/${newUser.userId}`;
+						});
+					}else{
+						console.log("Welcome Back ", validatedUser.user.displayName);
+			    		$window.location.href = `#!/${validatedUser.user.uid}`;
+					}
+
+				});
 
 
 			});
     		$window.location.href = `#!/${validatedUser.uid}`;
+    		$scope.$apply();
 	  	}).catch(function(error) {
 	    	console.log("error with google login", error);
 	  	});
