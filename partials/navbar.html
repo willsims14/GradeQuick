@@ -4,10 +4,6 @@
       <a class="navbar-brand" ng-href="#!/">Quick Grade</a>
 
         <button type="button" class="navbar-toggle btn btn-primary dropdown-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
-<!--           <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span> -->
         </button>
 
 
@@ -19,16 +15,10 @@
 
           <li class="dropdown" uib-dropdown>
             <a  class="btn dropdown-toggle"  uib-dropdown-toggle>My Classes <b class="caret"></b></a>
-            <ul class="dropdown-menu" role="menu">
+            <ul class="dropdown-menu">
                 <div  ng-repeat="course in navCourses">
                     <li><a ng-href="#!/courses/{{course.id}}">{{course.name}}</a></li>
                 </div>
-
-
-<!--               <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li><a href="#">Separated link</a></li>
-              <li><a href="#">One more separated link</a></li> -->
             </ul>
           </li>
     </ul>

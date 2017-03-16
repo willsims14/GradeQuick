@@ -30,7 +30,14 @@
 	background-color: #24292e;
 }
 
+.red{
+	color: red;
+	border: 2px solid red;
+}
 
+.disabled{
+	color: #808080;
+}
 
 
 /**********/

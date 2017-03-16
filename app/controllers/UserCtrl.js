@@ -14,7 +14,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 	$scope.emailAlreadyUsed = false;
 
 
-	$scope.user = AuthFactory.getUser();
+	// $scope.user = AuthFactory.getUser();
 
 
 	// When user logs in/out, change isLoggedIn value

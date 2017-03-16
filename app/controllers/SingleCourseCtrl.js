@@ -81,8 +81,11 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 
 	// Shows input field for entering a new grade
 	$scope.showNewGradeField = function(assignment){
+		console.log("Assignment: ", assignment);
         $scope.assignmentToUpdate = assignment;
 		$scope.enteringGrade = true;
+		$scope.clickedAssignment = assignment.name;
+
 	};
 
 	// Makes call to firebase to update a grade on an assignment
