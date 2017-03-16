@@ -10,6 +10,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 	let getUserCourses = () => {
 		let courses = [];
 		let user = AuthFactory.getUser();
+			console.log("USER: ", user);
 
 		return $q((resolve, reject) => {
 			$http.get(`${FBCreds.databaseURL}/courses.json?orderBy="userId"&equalTo="${user}"`)

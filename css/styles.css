@@ -31,13 +31,40 @@
 }
 
 .red{
-	color: red;
-	border: 2px solid red;
+	color: black;
+	background-color: yellow;
+	padding: 1%;
 }
 
 .disabled{
 	color: #808080;
 }
+
+#assignment-list{
+	list-style: none;
+
+}
+
+#single-assignment-list-item li{
+	margin-top: 2%;
+}
+
+#course-list{
+	list-style: none;
+}
+#course-list li{
+
+}
+#profile-header{
+	text-align: center;
+}
+
+#course-list-container{
+
+	text-align: center;
+}
+
+
 
 
 /**********/

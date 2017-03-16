@@ -1,7 +1,7 @@
 <nav class="navbar navbar-inverse" ng-controller="UserCtrl">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" ng-href="#!/">Quick Grade</a>
+      <a class="navbar-brand" ng-href="#!/{{user}}">Quick Grade</a>
 
         <button type="button" class="navbar-toggle btn btn-primary dropdown-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
         </button>
@@ -16,7 +16,7 @@
           <li class="dropdown" uib-dropdown>
             <a  class="btn dropdown-toggle"  uib-dropdown-toggle>My Classes <b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <div  ng-repeat="course in navCourses">
+                <div  ng-repeat="course in navCourses" >
                     <li><a ng-href="#!/courses/{{course.id}}">{{course.name}}</a></li>
                 </div>
             </ul>
@@ -28,6 +28,7 @@
     		<!-- ng-model for text -->
       <li><a ng-href="#" ng-show="!isLoggedIn" ng-click="openRegisterModal()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
       <li><a ng-href="#" ng-show="!isLoggedIn" ng-click="openLoginModal()"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      <li><a ng-href="#!/{{user}}/settings" ng-show="isLoggedIn"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
       <li><a ng-href="#" ng-show="isLoggedIn" ng-click="logout()"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
     </ul>
   </div>

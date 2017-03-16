@@ -1,20 +1,32 @@
+<div >
 <h1>{{courseName}}</h1>
 <select ng-init="selectedGradeStyle = styles[0]" ng-model="selectedGradeStyle" ng-options="style for style in styles" ng-change="recalculate()">
 
 </select>
 <br>
 <div>
-	<ul ng-repeat="ass in assignments">
-		<li ng-class="enteringGrade ? 'disabled' : ''"><strong>{{ass.name}}</strong>: {{ass.pointsEarned}}/{{ass.possiblePoints}}
-		<button class="btn btn-sm btn-secondary" ng-click="showNewGradeField(ass)" ng-class="enteringGrade ? 'disabled' : ''" ng-model="clicked" >Enter Grade</button>
-		<button class="btn btn-sm btn-danger" ng-click="deleteAssignment(ass.id)" ng-class="enteringGrade ? 'disabled' : ''">Delete</button></li>
-<!-- 		<li ng-show="enteringGrade"><input type="number" ng-model="assignments.newGrade"><button class="btn btn-sm btn-primary" ng-click="recordNewGrade(ass)">Submit</button><button class="btn btn-sm btn-secondary" ng-click="cancel()">Cancel</button> -->
+	<ul ng-repeat="ass in assignments track by ass.id" id="assignment-list">
+		<div ng-class="{red: wasAssignmentClicked(ass)}" id="single-assignment-list-item">
+			<li ng-class="enteringGrade ? 'disabled' : ''" >
+				<div class="col-sm-8">
+					<span class="col-sm-6"><strong>{{ass.name}}:</strong></span>
+					<span class="col-sm-6">{{ass.pointsEarned}}/{{ass.possiblePoints}}</span>
+				</div>
+				<div class="col-sm-4">
+					<button class="btn btn-sm btn-secondary" ng-click="showNewGradeField(ass)" ng-class="enteringGrade ? 'disabled' : ''" ng-model="clicked" class="">Change Grade</button>
+					<button class="btn btn-sm btn-danger" ng-click="deleteAssignment(ass.id)" 
+						ng-class="">Delete</button>
+				</div>
+			</li>
+			<br>
+			<hr>
+		</div>
 	</ul>
 </div>
 <div>
-<input id="new-grade-btn" type="number" ng-model="updatedGrade" ng-show="enteringGrade" placeholder="New Grade For {{clickedAssignment}}">
+<input id="new-grade-btn" type="number" ng-model="updatedGrade" ng-show="enteringGrade" placeholder="New Grade For {{clickedAssignment.name}}">
 <button  ng-show="enteringGrade" ng-click="updateGrade()"><span class="glyphicon glyphicon-check" ></span></button>
-<button ng-show="enteringGrade" ng-click="enteringGrade = false"><span>Cancel</span></button>
+<button ng-show="enteringGrade" ng-click="cancel()"><span>Cancel</span></button>
 </div>
 
 <h2 >Final Grade: {{finalGrade}} </h2>
@@ -22,3 +34,4 @@
 <button class="btn btn-primary" ng-click="openNewAssignmentModal()">New Assignment</button>
 
 <div ng-include="'partials/MODAL_newAssignment.html'"></div>
+</div>

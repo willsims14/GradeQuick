@@ -29,6 +29,10 @@ app.config(function($routeProvider){
         controller: 'SingleCourseCtrl',
         resolve: {isAuth}
     }).
+    when('/:userId/settings', {
+        templateUrl: 'partials/settings.html',
+        controller: 'SettingsCtrl'
+    }).
     otherwise('/');
 });
 
