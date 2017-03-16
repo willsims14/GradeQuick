@@ -1,11 +1,5 @@
 "use strict";
 
-/* Buttons
-	* Create New Course
-	* Add New Assignment
-	* Enter grade for assignment
-*/
-
 
 app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeStorage){
 	// Get userId from URL 
@@ -13,19 +7,21 @@ app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeS
 	$scope.userId = myParams.userId;
 	$scope.course = {};
 
+    console.log("PROFILE CTRL", myParams);
+    console.log("2: ", $routeParams);
+
 
 	// Get user information to display on profile
 	AuthFactory.getUserProfile($scope.userId)
 	.then( function(userProfile){
 		// Set the returned user profile equal to $scope.account
 		$scope.account = Object.values(userProfile)[0];
-	});
+    	GradeStorage.getUserCourses()
+    	.then( function(courses){
+    		$scope.courses = courses;
+    	});
+    });
 
-	GradeStorage.getUserCourses()
-	.then( function(courses){
-		$scope.courses = courses;
-		console.log("Courses: ", $scope.courses);
-	});
 
 	// Opens modal for user to login
     $scope.openNewCourseModal = function(){

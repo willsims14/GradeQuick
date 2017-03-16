@@ -13,28 +13,32 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 	$scope.btnText = ""; 
 	$scope.emailAlreadyUsed = false;
 
-
-	// $scope.user = AuthFactory.getUser();
-
+	var user = AuthFactory.getUser();
 
 	// When user logs in/out, change isLoggedIn value
 	firebase.auth().onAuthStateChanged( function(user){
 		firebase.auth().onAuthStateChanged( function(user){
 			if(user){
+				$scope.user = user.uid;
 				$scope.isLoggedIn = true;
-				GradeStorage.getUserCourses()
-				.then( function(userCourses){
-					$scope.navCourses = userCourses;
-					console.log("$Scope.courses: ", $scope.navCourses);
-				});
 			}else{
 				$scope.isLoggedIn = false;
-				// $window.location.href = "#!/login";
 			}
 		});
 	});
-	// Wrote function as IIFE so that a logout
-	//		occurs immediately upon load
+
+	$scope.$on('$routeChangeStart', function(next, current) { 
+		if($scope.user){
+			console.log("$User: ", $scope.user);
+			setTimeout( function(){
+				GradeStorage.getUserCourses()
+				.then( function(userCourses){
+					$scope.navCourses = userCourses;
+				});
+			}, 1000);
+		}
+	});
+
 	let logout = ( function(){
 		AuthFactory.logoutUser()
 		.then(function(data){
@@ -43,7 +47,6 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 			console.log("error occured on logout");
 		});
 	})();
-
 
 	// Opens modal for user to login
     $scope.openLoginModal = function(){
@@ -90,6 +93,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 			$scope.user = validatedUser.user.uid;
 			console.log("CurrentUser: ", $scope.user);
 
+
 			// If user does not have a profile, make one
 			AuthFactory.checkUserHasProfile(validatedUser.user.uid)
 			.then( function(userExists){
@@ -102,8 +106,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 					};
 
 					AuthFactory.createUserProfile(newUser)
-					.then( function(x){
-						console.log("x: ", x);
+					.then( function(){
 			    		$window.location.href = `#!/${newUser.userId}`;
 					});
 				}else{
@@ -111,8 +114,6 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 		    		$window.location.href = `#!/${validatedUser.user.uid}`;
 				}
 			});
-    		$window.location.href = `#!/${validatedUser.uid}`;
-    		$scope.$apply();
 	  	}).catch(function(error) {
 	    	console.log("error with google login", error);
 	  	});
@@ -156,12 +157,6 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 	    .catch( function(error){
 	    	console.log("Error: ", error);
 	    });
-  	};
-
-  	// Why do I have to do this?
-  	$scope.goToUserProfile = function(){
-  		console.log("$Scope.user: ", $scope.user);
-		$scope.user = AuthFactory.getUser();
   	};
 
 

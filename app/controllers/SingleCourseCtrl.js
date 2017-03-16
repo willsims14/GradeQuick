@@ -8,8 +8,9 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 	$scope.newAssignment = {};
 	// For dropown under header
 	$scope.styles = ["Cumulative Average", "Weighted Average"];
-
 	$scope.assignments = [];
+	$scope.clickedAssignment = {};
+	$scope.clickedAssignment.id = "";
 	// Local Variables
 	var selectedCourse = $routeParams.courseId;
 	var user = AuthFactory.getUser();
@@ -26,6 +27,16 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 		$scope.assignments = assignments;
 		$scope.recalculate();
 	});
+
+	$scope.wasAssignmentClicked = function(assignment){
+		for(var i in $scope.assignments){
+			var match = $scope.assignments[i];
+			if(assignment.id == $scope.clickedAssignment.id){
+				return true;
+			}
+		}
+		return false;
+	};
 
 	// Open modal for a new assignment
 	$scope.openNewAssignmentModal = function(){
@@ -84,7 +95,7 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 		console.log("Assignment: ", assignment);
         $scope.assignmentToUpdate = assignment;
 		$scope.enteringGrade = true;
-		$scope.clickedAssignment = assignment.name;
+		$scope.clickedAssignment = assignment;
 
 	};
 
@@ -128,6 +139,11 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 				console.log("ELSE OCCURRED");
 			}
 		}
+    };
+
+    $scope.cancel = function(){
+    	$scope.enteringGrade = false;
+    	$scope.clickedAssignment = "";
     };
 
 
