@@ -4,14 +4,22 @@
 app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeStorage){
 	// Get userId from URL 
 	var myParams = $routeParams;
+    $scope.userId = myParams.userId;
+
+    // New Course Placeholder
+    $scope.course = {};
+
+    // Ng-Models
     $scope.selectedCourseINeed = "";
-	$scope.userId = myParams.userId;
-	$scope.course = {};
     $scope.neededAssignmentChosen = false;
-    $scope.assignmentsINeed = "";
+    $scope.ungradedAssignments = "";
     $scope.styles = ["Cumulative Avg", "Weighted Avg"];
     $scope.finalGrade = "";
+    // Ng-Shows
     $scope.noUngradedAssignments = false;
+    $scope.assignmentChosen = false;
+    $scope.gradeStyleChosen = false;
+    $scope.courseChosen = false;
 
 
 	// Get user information to display on profile
@@ -89,7 +97,8 @@ app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeS
     $scope.getCourseDetails = function(){
         GradeStorage.getUngradedAssignmentsForCourse($scope.selectedCourseINeed.id)
         .then( function(allAssignments){
-            $scope.assignmentsINeed = allAssignments.ungraded;
+            $scope.ungradedAssignments = allAssignments.ungraded;
+            $scope.allAssignments = allAssignments.all;
 
             // If there are no ungraded assignment for a course,
             //  show an alert
@@ -97,15 +106,15 @@ app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeS
                 $scope.noUngradedAssignments = true;
                 $scope.courseChosen = false;
             }else{
-                $scope.courseChosen = true;
                 $scope.noUngradedAssignments = false;
+                $scope.courseChosen = true;
             }
 
             // Set final grade that depends on grade style chosen
             if($scope.selectedGradeStyle === "Cumulative Avg"){
-                $scope.finalGrade = (GradeStorage.calcCumulativeAvg(allAssignments.all)).toFixed(2) + "%";
+                $scope.finalGrade = (GradeStorage.calcCumulativeAvg(allAssignments.all)).toFixed(1) + "%";
             }else if($scope.selectedGradeStyle === "Weighted Avg"){
-                $scope.finalGrade = GradeStorage.calcWeightedAvg(allAssignments.all).toFixed(2) + "%";
+                $scope.finalGrade = GradeStorage.calcWeightedAvg(allAssignments.all).toFixed(1) + "%";
             }else{
 
             }
@@ -113,6 +122,49 @@ app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeS
     };
 
     $scope.seeWhatINeed = function(){
+
+        if($scope.selectedGradeStyle === "Weighted Avg"){
+
+        var possiblePoints =GradeStorage.getCoursePossiblePoints($scope.allAssignments) +  $scope.selectedAssignmentINeed.possiblePoints;
+        var earnedPoints = GradeStorage.getCourseEarnedPoints($scope.allAssignments);
+        var gradeNeeded = 0.0;
+        var desiredGrade = $scope.desiredGrade / 100;
+        var i;
+
+
+
+        // Earned:           72pt + x
+        // Possible:        205pt
+        // Desired Grade:    89%
+        
+        // FORMULA: (127 + X)/145 = 0.89
+        // FORMULA:    X = 57 pts (out of 70)
+        
+
+
+        console.log("-------------------------------------------------");
+        var         y = 0.89 - (127/205);
+        console.log("0.27: ", y);
+        console.log("(Y / 205) = ", 0.89 - (127/205));
+        console.log(" Y = ", (y * 205));
+        // 59.55
+        console.log("-------------------------------------------------");
+
+
+        var gradeRatio = desiredGrade - (earnedPoints / possiblePoints);
+
+        $scope.finalGrade = (gradeRatio * possiblePoints) + " / " + $scope.selectedAssignmentINeed.possiblePoints;
+
+        alert("You need a " + $scope.finalGrade + " out of " + $scope.selectedAssignmentINeed.possiblePoints + "\n (Or a " + ($scope.finalGrade / $scope.selectedAssignmentINeed.possiblePoints) + "%");
+
+
+
+        }else{
+            console.log("--------- Calculating ACCUMULATING Avg --------------");
+        }
+
+
+
         // Reset ng-shows
         $scope.courseChosen = false;
         $scope.assignmentChosen = false;
@@ -122,14 +174,11 @@ app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeS
         $scope.finalGrade = "";
         $scope.selectedAssignmentINeed = "";
 
-        console.log("Desired Grade: ", $scope.desiredGrade);
         // Make calculation for what they need to get
-         
+        
+
         
 
     };
-
-
-
 
 });

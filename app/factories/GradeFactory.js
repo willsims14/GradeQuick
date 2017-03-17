@@ -76,6 +76,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 	};
 
 
+
 	let addUserCourse = (newCourse) => {
 		let courses = [];
 		let user = AuthFactory.getUser();
@@ -173,22 +174,13 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 		var totalPossiblePoints = 0.0;
     	var finalGrade = 0.0;
     	var i;
+		
+		// Get a course's total amount of points possible 
+		totalPossiblePoints = getCoursePossiblePoints(assignments);
+		totalEarnedPoints = getCourseEarnedPoints(assignments);
 
-    	// Get total amount of possible points
-		for(i = 0; i < assignments.length; i++){
-			if(assignments[i].pointsEarned !== '*'){
-				totalPossiblePoints += parseInt(assignments[i].possiblePoints);
-			}
-		}
-		// Get total amount of earned points
-		for(i = 0; i < numAssignments; i++){
-			if(assignments[i].pointsEarned !== '*'){
-				totalEarnedPoints += parseInt(assignments[i].pointsEarned);
-			}
-			
-		}
+		// Get a student's total amount of earned points
 		finalGrade = ((totalEarnedPoints / totalPossiblePoints) * 100);
-		console.log("BEFORE Final: ", finalGrade);
 		return finalGrade;
     }
 
@@ -210,6 +202,28 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
     }
 
 
+    function getCoursePossiblePoints(assignments){
+    	var possiblePoints = 0.0;
+    	// Get total amount of possible points
+		for(var i = 0; i < assignments.length; i++){
+			if(assignments[i].pointsEarned !== '*'){
+				possiblePoints += parseFloat(assignments[i].possiblePoints);
+			}
+		}
+		return possiblePoints;
+    }
 
-	return {getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
+    function getCourseEarnedPoints(assignments){
+    	var earnedPoints = 0.0;
+		for(var i = 0; i < assignments.length; i++){
+			if(assignments[i].pointsEarned !== '*'){
+				earnedPoints += parseFloat(assignments[i].pointsEarned);
+			}
+		}
+		return earnedPoints;
+    }
+
+
+
+	return {getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
 });
