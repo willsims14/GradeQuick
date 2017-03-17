@@ -20,7 +20,7 @@
                 <strong>Danger!</strong> No ungraded assignments for this course!
               </div>
 
-              <div ng-show="courseChosen">Assignment: <select ng-init="selectedAssignmentINeed = assignmentsINeed[0]" ng-model="selectedAssignmentINeed" ng-options="ass.name for ass in assignmentsINeed" ng-change="assignmentChosen = true">
+              <div ng-show="courseChosen">Assignment: <select ng-init="selectedAssignmentINeed = ungradedAssignments[0]" ng-model="selectedAssignmentINeed" ng-options="ass.name for ass in ungradedAssignments" ng-change="assignmentChosen = true">
               </select></div>
 
               <div ng-show="assignmentChosen">Desired Grade in Course: <input type="number" ng-model="desiredGrade"></div>
