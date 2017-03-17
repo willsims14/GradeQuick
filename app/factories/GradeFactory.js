@@ -46,6 +46,35 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 		});
 	};
 
+	let getUngradedAssignmentsForCourse = function(courseId){
+		let assignments = [];
+		let ungradedAssignments = [];
+		return $q((resolve, reject) => {
+			$http.get(`${FBCreds.databaseURL}/assignments.json?orderBy="courseId"&equalTo="${courseId}"`)
+			.then((assignmentsObj) => {
+				let assCollection = assignmentsObj.data;
+
+				Object.keys(assCollection).forEach((key) => {
+					assCollection[key].id = key;
+					assignments.push(assCollection[key]);
+				});
+
+				console.log("Assignments: ", assignments);
+
+				for(var i = 0; i < assignments.length; i++){
+					if(assignments[i].pointsEarned === '*'){
+						ungradedAssignments.push(assignments[i]);
+					}
+				}
+				let allAssignments = {all: assignments, ungraded:ungradedAssignments};
+				resolve(allAssignments);
+			})
+			.catch((error) => {
+				reject(error);
+			});
+		});
+	};
+
 
 	let addUserCourse = (newCourse) => {
 		let courses = [];
@@ -182,5 +211,5 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 
 
 
-	return {deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
+	return {getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
 });

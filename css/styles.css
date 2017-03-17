@@ -40,6 +40,10 @@
 	color: #808080;
 }
 
+.enabled{
+	color: black;
+}
+
 #assignment-list{
 	list-style: none;
 
@@ -51,6 +55,8 @@
 
 #course-list{
 	list-style: none;
+	padding: none;
+	margin: none;
 }
 #course-list li{
 
@@ -64,7 +70,11 @@
 	text-align: center;
 }
 
-
+.alert{
+	margin: 0;
+	padding: none;
+	padding: 5px;
+}
 
 
 /**********/

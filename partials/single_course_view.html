@@ -7,7 +7,7 @@
 <div>
 	<ul ng-repeat="ass in assignments track by ass.id" id="assignment-list">
 		<div ng-class="{red: wasAssignmentClicked(ass)}" id="single-assignment-list-item">
-			<li ng-class="enteringGrade ? 'disabled' : ''" >
+			<li ng-class="enteringGrade ? 'disabled' : 'enabled'" >
 				<div class="col-sm-8">
 					<span class="col-sm-6"><strong>{{ass.name}}:</strong></span>
 					<span class="col-sm-6">{{ass.pointsEarned}}/{{ass.possiblePoints}}</span>

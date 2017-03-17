@@ -103,6 +103,7 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
     $scope.updateGrade = function(){
         var updatedAssignment = $scope.assignmentToUpdate;
         updatedAssignment.pointsEarned = $scope.updatedGrade;
+		$scope.enteringGrade = false;
 
         if(updatedAssignment.pointsEarned > updatedAssignment.possiblePoints){
 			console.log("CANT EARN MORE POINTS THAN POSSIBLE");
@@ -112,7 +113,6 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 
         GradeStorage.recordNewGrade(updatedAssignment.id, updatedAssignment)
         .then( function(){
-			$scope.enteringGrade = false;
         	GradeStorage.getCourseAssignments(selectedCourse)
 			.then( function(assignments){
 				$("#new-grade-btn").val(" ");
@@ -125,6 +125,8 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 
     $scope.recalculate = function(){
 		var finalGrade = 0.0;
+
+		console.log("selectedGradeStyle: ", $scope.selectedGradeStyle);
 
 		if($scope.assignments.length === 0){
 			$scope.finalGrade = "No Grades Yet!";
