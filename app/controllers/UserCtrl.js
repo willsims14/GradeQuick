@@ -29,7 +29,6 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 
 	$scope.$on('$routeChangeStart', function(next, current) { 
 		if($scope.user){
-			console.log("$User: ", $scope.user);
 			setTimeout( function(){
 				GradeStorage.getUserCourses()
 				.then( function(userCourses){
