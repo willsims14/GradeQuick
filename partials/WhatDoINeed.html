@@ -1,41 +1,32 @@
-<h2>What Do I Need</h2>
+<div id="grade-needed-container">
+    <div>
+        <section>
+            <h2>What Do I Need</h2>
+            <hr>
+            <h4>Choose a class</h4>
+            <h4>{{finalGradeShow}}</h4>
+
+            <div>Grading Style: <select ng-model="selectedGradeStyle" ng-options="style for style in styles"  ng-change="gradeStyleChosen = true" ></select></div>
+
+            <div ng-show="gradeStyleChosen">Course: <select ng-model="selectedCourseINeed" ng-options="course.name for course in courses" ng-change="getCourseDetails()"><br></select></div>
 
 
+            <div class="alert alert-danger" ng-show="noUngradedAssignments">
+            <strong>Danger!</strong> No ungraded assignments for this course!
+            </div>
 
-       <div>
-          <div >
-            <button type="button" class="close" ></button>
-            <h4 >What Grade Do I Need?</h4>
-          </div>
-          <div>
-            <section>
-              <h4>Choose a class</h4>
-              <h4>{{finalGrade}}</h4>
+            <div ng-show="courseChosen">Assignment: <select ng-init="selectedAssignmentINeed = ungradedAssignments[0]" ng-model="selectedAssignmentINeed" ng-options="ass.name for ass in ungradedAssignments" ng-change="assignmentChosen = true">
+            </select></div>
 
-              <div>Grading Style: <select ng-model="selectedGradeStyle" ng-options="style for style in styles"  ng-change="gradeStyleChosen = true" ></select></div>
+            <div ng-show="assignmentChosen">Desired Grade in Course: <input type="number" ng-model="desiredGrade"></div>
+        </section>
+    </div>
+    <div>
+        <button class="btn btn-primary"   ng-click="seeWhatINeed()">See What I Need</button>
+        <button class="btn btn-secondary" ng-click="clearFields()">Cancel</button>
+    </div>
 
-              <div ng-show="gradeStyleChosen">Course: <select ng-model="selectedCourseINeed" ng-options="course.name for course in courses" ng-change="getCourseDetails()"><br>
-              </select></div>
-
-
-              <div class="alert alert-danger" ng-show="noUngradedAssignments">
-                <strong>Danger!</strong> No ungraded assignments for this course!
-              </div>
-
-              <div ng-show="courseChosen">Assignment: <select ng-init="selectedAssignmentINeed = ungradedAssignments[0]" ng-model="selectedAssignmentINeed" ng-options="ass.name for ass in ungradedAssignments" ng-change="assignmentChosen = true">
-              </select></div>
-
-              <div ng-show="assignmentChosen">Desired Grade in Course: <input type="number" ng-model="desiredGrade"></div>
-
-
-            </section>
-        </div>
-        <div>
-            <button class="btn btn-primary"  data-dismiss="modal" ng-click="seeWhatINeed()">See What I Need</button>
-            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-		</div>
-
-		<h2 ng-show="showNecesaryGrade">Grade Needed: {{necesaryGrade}}</h2>
-		<h3 ng-show="showNecesaryGrade">(or {{percentageNecesary}})
-
+    <h2 ng-show="showNecesaryGrade">Grade Needed: {{necesaryGrade}}</h2>
+    <h3 ng-show="showNecesaryGrade">(or {{percentageNecesary}})</h3>
+</div>
 

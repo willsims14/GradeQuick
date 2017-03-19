@@ -5,7 +5,7 @@ app.controller("WhatDoINeedCtrl", function($scope, AuthFactory, GradeStorage){
 	console.log("What DO I Need");
 
 	    // Ng-Models
-    $scope.selectedCourseINeed = "";
+    $scope.selectedCourseINeed = null;
     $scope.neededAssignmentChosen = false;
     $scope.ungradedAssignments = "";
     $scope.styles = ["Cumulative Avg", "Weighted Avg"];
@@ -49,9 +49,11 @@ app.controller("WhatDoINeedCtrl", function($scope, AuthFactory, GradeStorage){
 
             // Set final grade that depends on grade style chosen
             if($scope.selectedGradeStyle === "Cumulative Avg"){
-                $scope.finalGrade = (GradeStorage.calcCumulativeAvg(allAssignments.all)).toFixed(1) + "%";
+                $scope.finalGradeShow = (GradeStorage.calcCumulativeAvg(allAssignments.all)).toFixed(1) + "%";
+                $scope.finalGrade = GradeStorage.calcCumulativeAvg(allAssignments.all);
             }else if($scope.selectedGradeStyle === "Weighted Avg"){
-                $scope.finalGrade = GradeStorage.calcWeightedAvg(allAssignments.all).toFixed(1) + "%";
+                $scope.finalGradeShow = GradeStorage.calcWeightedAvg(allAssignments.all).toFixed(1) + "%";
+                $scope.finalGrade = GradeStorage.calcWeightedAvg(allAssignments.all);
             }else{
 
             }
@@ -59,37 +61,46 @@ app.controller("WhatDoINeedCtrl", function($scope, AuthFactory, GradeStorage){
     };
 
     $scope.seeWhatINeed = function(){
-
-        if($scope.selectedGradeStyle === "Weighted Avg"){
-
-        var possiblePoints =GradeStorage.getCoursePossiblePoints($scope.allAssignments) +  $scope.selectedAssignmentINeed.possiblePoints;
-        var earnedPoints = GradeStorage.getCourseEarnedPoints($scope.allAssignments);
         var desiredGrade = $scope.desiredGrade / 100;
         var i;
 
+        // Weighted Average
+        if($scope.selectedGradeStyle === "Weighted Avg"){
+            var possiblePoints =GradeStorage.getCoursePossiblePoints($scope.allAssignments) +  $scope.selectedAssignmentINeed.possiblePoints;
+            var earnedPoints = GradeStorage.getCourseEarnedPoints($scope.allAssignments);
 
-        var gradeRatio = desiredGrade - (earnedPoints / possiblePoints);
-        var pointsNecesary = (gradeRatio * possiblePoints);
+            var gradeRatio = desiredGrade - (earnedPoints / possiblePoints);
+            var pointsNecesary = (gradeRatio * possiblePoints);
 
-        $scope.percentageNecesary = ((pointsNecesary / $scope.selectedAssignmentINeed.possiblePoints) * 100).toFixed(1) + "%";
+            $scope.percentageNecesary = ((pointsNecesary / $scope.selectedAssignmentINeed.possiblePoints) * 100).toFixed(1) + "%";
 
-        $scope.necesaryGrade = pointsNecesary.toFixed(1) + " / " + $scope.selectedAssignmentINeed.possiblePoints + " points";
-        $scope.showNecesaryGrade = true;
-        console.log("GRADE: ", $scope.necesaryGrade);
+            $scope.necesaryGrade = pointsNecesary.toFixed(1) + " / " + $scope.selectedAssignmentINeed.possiblePoints + " points";
+            $scope.showNecesaryGrade = true;
+        // Cumulative Average
         }else{
-            console.log("--------- Calculating ACCUMULATING Avg --------------");
+            var numAssignments = ($scope.allAssignments.length - $scope.ungradedAssignments.length) + 1;
+            var gradeNeeded = numAssignments * desiredGrade;
+
+            for(i = 0; i < $scope.allAssignments.length; i++){
+                if($scope.allAssignments[i].pointsEarned !== "*"){
+                    gradeNeeded -= ($scope.allAssignments[i].pointsEarned / $scope.allAssignments[i].possiblePoints);
+                }
+            }
+            gradeNeeded *= $scope.selectedAssignmentINeed.possiblePoints;
+
+            // Set $scope variables for DOM
+            $scope.necesaryGrade = gradeNeeded.toFixed(1) + " / " + $scope.selectedAssignmentINeed.possiblePoints + " points";
+            $scope.showNecesaryGrade = true;
+            $scope.percentageNecesary = ((gradeNeeded / $scope.selectedAssignmentINeed.possiblePoints) * 100).toFixed(1) + "%";
         }
-        
+    };
 
-        // Reset ng-shows
-        // $scope.courseChosen = false;
-        // $scope.assignmentChosen = false;
-
-        // Reset ng-models
-        // $scope.selectedCourseINeed = "";
-        // $scope.selectedAssignmentINeed = "";
-
-        // Make calculation for what they need to get
+    $scope.clearFields = function(){
+        $scope.noUngradedAssignments = false;
+        $scope.assignmentChosen = false;
+        $scope.gradeStyleChosen = false;
+        $scope.courseChosen = false;
+        $scope.showNecesaryGrade = false; 
     };
 
 });

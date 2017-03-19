@@ -102,3 +102,8 @@
 #login-google-btn{
 	text-align: center;
 }
+
+#grade-needed-container{
+	margin-left: 5%;
+	line-height: 2em;
+}
