@@ -31,7 +31,13 @@ app.config(function($routeProvider){
     }).
     when('/:userId/settings', {
         templateUrl: 'partials/settings.html',
-        controller: 'SettingsCtrl'
+        controller: 'SettingsCtrl',
+        resolve: {isAuth}
+    }).
+    when('/:userId/whatif', {
+        templateUrl: 'partials/WhatDoINeed.html',
+        controller: 'WhatDoINeedCtrl',
+        resolve:{isAuth}
     }).
     otherwise('/');
 });
