@@ -49,6 +49,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 	let getUngradedAssignmentsForCourse = function(courseId){
 		let assignments = [];
 		let ungradedAssignments = [];
+		console.log("CourseID: ", courseId);
 		return $q((resolve, reject) => {
 			$http.get(`${FBCreds.databaseURL}/assignments.json?orderBy="courseId"&equalTo="${courseId}"`)
 			.then((assignmentsObj) => {
