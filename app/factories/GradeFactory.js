@@ -46,6 +46,26 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 		});
 	};
 
+	let getCourseObject = (courseId) => {
+		let course = {};
+		return $q((resolve, reject) => {
+			$http.get(`${FBCreds.databaseURL}/courses/${courseId}.json`)
+			.then((coursesObj) => {
+				course.info = coursesObj.data;
+				// resolve(course);
+
+				$http.get(`${FBCreds.databaseURL}/assignments.json?orderBy="courseId"&equalTo="${courseId}"`)
+				.then((assignments) => {
+					course.assignments = assignments.data;
+					resolve(course);
+				});
+			})
+			.catch((error) => {
+				reject(error);
+			});
+		});
+	};
+
 	let getUngradedAssignmentsForCourse = function(courseId){
 		let assignments = [];
 		let ungradedAssignments = [];
@@ -71,6 +91,19 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 				resolve(allAssignments);
 			})
 			.catch((error) => {
+				reject(error);
+			});
+		});
+	};
+
+	let updateCourseGrades = (editedCourse, courseId) => {
+		return $q(function(resolve, reject){
+			$http.patch(`${FBCreds.databaseURL}/courses/${courseId}.json`, 
+				angular.toJson(editedCourse))
+			.then( function(ObjectFromFirebase){
+				resolve(ObjectFromFirebase);
+			})
+			.catch( function(error){
 				reject(error);
 			});
 		});
@@ -148,6 +181,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 		});
 	};
 
+
 	let recordNewGrade = function(assId, editedAssignment){
 
 		return $q(function(resolve, reject){
@@ -224,21 +258,8 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 		return earnedPoints;
     }
 
-    function getWeightedGPA(courses){
-    	var finalGPA = 0.0;
-    	var i = 0;
-    	var myCourses = [];
-    	for(i = 0; i < courses.length; i++){
-    		if(courses[i].possiblePoints !== "*"){
-    			myCourses.push(courses[i]);
-    		}
-    	}
-
-    	console.log("MyCourses: ", myCourses);
-
-    }
 
 
 
-	return {getWeightedGPA, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
+	return {updateCourseGrades, getCourseObject, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
 });
