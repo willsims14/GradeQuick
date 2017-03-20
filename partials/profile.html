@@ -2,12 +2,28 @@
 	<div id="profile-header">
 		<h1><strong>Profile</strong></h1>
 		<h3>{{account.name}}</h3>
+	<select ng-model="semester.selectedSemester" ng-options="x for x in semesters" ng-change="getGPA(semester)" ng-init="semester.selectedSemester = semesters[0]">
+	</select>
 	</div>
+
 	<hr>
 
-	<!-- Course View -->
-	<div ng-include="'partials/course_view.html'"></div>
-	<div ng-include="'partials/MODAL_newCourse.html'"></div>
+	<div id="course-list-container">
+		<div class="col-sm-6">
+			<h3>My Courses</h3>
+			<h4><i>{{semester.selectedSemester}}</i></h4>
+			<div ng-show="showGPA">
+				<h4 >GPA: {{semester.GPA}}</h4>
+				<select ng-model="gradeStyle" ng-change="getGPA(gradeStyle)" ng-options="style for style in styles" ng-init="gradeStyle = styles[0]"></select>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<ul ng-repeat="course in courses | filter: semester.selectedSemester" id="course-list">
+				<li><a href="#!/courses/{{course.id}}" ng-click="x(course.id)">{{course.name}}</a> <button class="btn btn-sm btn-danger delete-course-btn" ng-click="courseDelete(course.id)"><span class="glyphicon glyphicon-trash"></span></button></li>
+			</ul>
+		</div >	
+	</div>
+
 
 
 	<div id="profile-buttons">
@@ -15,6 +31,7 @@
 		<a ng-href="#!/{{userId}}/whatif"><button type="button" class="btn btn-default">See What I Need</button></a>
 	</div>
 
+	<div ng-include="'partials/MODAL_newCourse.html'"></div>
 
 
 

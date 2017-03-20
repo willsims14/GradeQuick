@@ -101,25 +101,53 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 
 	// Makes call to firebase to update a grade on an assignment
     $scope.updateGrade = function(){
-        var updatedAssignment = $scope.assignmentToUpdate;
-        updatedAssignment.pointsEarned = $scope.updatedGrade;
-		$scope.enteringGrade = false;
+    	console.log("Clicked Assignment: ", selectedCourse);
 
-        if(updatedAssignment.pointsEarned > updatedAssignment.possiblePoints){
-			console.log("CANT EARN MORE POINTS THAN POSSIBLE");
-			$("#new-grade-btn").html(" ");
-			return;
-        }
+    	GradeStorage.getCourseObject(selectedCourse)
+    	.then( function(courseObj) {
+    		let myCourse = courseObj.info;
+    		let courseAssignments = Object.values(courseObj.assignments);
 
-        GradeStorage.recordNewGrade(updatedAssignment.id, updatedAssignment)
-        .then( function(){
-        	GradeStorage.getCourseAssignments(selectedCourse)
-			.then( function(assignments){
-				$("#new-grade-btn").val(" ");
-				$scope.assignments = assignments;
-				$scope.recalculate();
-			});
-        });
+    		let accumulatedCourseGrade = GradeStorage.calcCumulativeAvg(courseAssignments);
+    		let weightedCourseGrade = GradeStorage.calcWeightedAvg(courseAssignments);
+
+    		myCourse.finalAccumulated = accumulatedCourseGrade;
+    		myCourse.finalWeighted = weightedCourseGrade;
+
+    		// Update Course to reflect newly calculated final grade values
+    		GradeStorage.updateCourseGrades(myCourse, selectedCourse)
+    		.then( (msg) => {
+
+    			console.log("Message: ", msg);
+
+		        var updatedAssignment = $scope.assignmentToUpdate;
+		        updatedAssignment.pointsEarned = $scope.updatedGrade;
+		        updatedAssignment.weightedGradePercentage = (updatedAssignment.pointsEarned / updatedAssignment.possiblePoints) * 100;
+				$scope.enteringGrade = false;
+
+				console.log("UpdatedAssignment: ", updatedAssignment);
+
+		        if(updatedAssignment.pointsEarned > updatedAssignment.possiblePoints){
+					console.log("CANT EARN MORE POINTS THAN POSSIBLE");
+					$("#new-grade-btn").html(" ");
+					return;
+		        }
+
+		        GradeStorage.recordNewGrade(updatedAssignment.id, updatedAssignment)
+		        .then( function(){
+		        	GradeStorage.getCourseAssignments(selectedCourse)
+					.then( function(assignments){
+						$("#new-grade-btn").val(" ");
+						$scope.assignments = assignments;
+						$scope.recalculate();
+					});
+		        });
+
+
+    		});
+
+    	});
+
     };
     
 
