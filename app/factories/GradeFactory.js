@@ -224,7 +224,21 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 		return earnedPoints;
     }
 
+    function getWeightedGPA(courses){
+    	var finalGPA = 0.0;
+    	var i = 0;
+    	var myCourses = [];
+    	for(i = 0; i < courses.length; i++){
+    		if(courses[i].possiblePoints !== "*"){
+    			myCourses.push(courses[i]);
+    		}
+    	}
+
+    	console.log("MyCourses: ", myCourses);
+
+    }
 
 
-	return {getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
+
+	return {getWeightedGPA, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
 });

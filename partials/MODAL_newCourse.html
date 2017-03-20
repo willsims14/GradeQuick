@@ -11,16 +11,14 @@
               <div>
                 Course Name: <input class="form-control" type="text" autofocus="true"  ng-model="course.name" ng-focus="true">
                 Course Description: <input class="form-control" type="text" ng-model="course.desc"><br>
-                Course Grading Style: 
-                <select>
-                  <option>Percentage</option>
-                  <option>Total Points</option>
-                </select>
+                Semester Taken: 
+                <select ng-model="semester.season" ng-options="x for x in seasons" ng-init="semester.season = seasons[0]"></select>
+                <select ng-model="semester.year" ng-options="y for y in years" ng-init="semester.year = years[years.length - 2]"></select>
               </div> 
             </section>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-primary"  data-dismiss="modal" ng-click="createCourse()">Add Course</button>
+            <button class="btn btn-primary"  data-dismiss="modal" ng-click="createCourse(semester)">Add Course</button>
             <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
       </div>
