@@ -47,10 +47,14 @@
 
 #assignment-list{
 	list-style: none;
-
+	margin: 0px;
+	padding: 0px;
 }
 
+
 #single-assignment-list-item li{
+	margin: 0px;
+	padding: 0px;
 	margin-top: 2%;
 }
 
@@ -72,6 +76,49 @@
 #main-container{
 
 	text-align: center;
+}
+
+#single-course-view-container{
+	border: 2px solid black;
+	padding: 0px;
+	margin: 0px;
+	line-height: 2em;
+	padding-bottom: 1%;
+	background-color: #89898A;
+	color: #020202;
+	font-size: 1.05em;
+	margin-left: 2%;
+}
+#single-course-btns{
+	margin: 0px;
+	padding: 0px;
+	line-height: 2.5em;
+	text-align: center;
+	margin: 5% 0;
+}
+#single-course-btns h2{
+	padding: 0px;
+	margin: 0px;
+}
+
+.course-name{
+	text-decoration: underline;
+}
+
+
+#single-course-header h1{
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+	margin-bottom: 2%;
+}
+
+.single-course-delete-btns{
+	margin: 0px;
+	padding: 0px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
 }
 
 #course-list-container{

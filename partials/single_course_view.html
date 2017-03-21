@@ -1,37 +1,48 @@
-<div >
-<h1>{{courseName}}</h1>
-<select ng-init="selectedGradeStyle = styles[0]" ng-model="selectedGradeStyle" ng-options="style for style in styles" ng-change="recalculate()">
-
-</select>
-<br>
 <div>
-	<ul ng-repeat="ass in assignments track by ass.id" id="assignment-list">
-		<div ng-class="{red: wasAssignmentClicked(ass)}" id="single-assignment-list-item">
-			<li ng-class="enteringGrade ? 'disabled' : 'enabled'" >
-				<div class="col-sm-8">
-					<span class="col-sm-6"><strong>{{ass.name}}:</strong></span>
-					<span class="col-sm-6">{{ass.pointsEarned}}/{{ass.possiblePoints}}</span>
-				</div>
-				<div class="col-sm-4">
-					<button class="btn btn-sm btn-secondary" ng-click="showNewGradeField(ass)" ng-class="enteringGrade ? 'disabled' : ''" ng-model="clicked" class="">Change Grade</button>
-					<button class="btn btn-sm btn-danger" ng-click="deleteAssignment(ass.id)" 
-						ng-class="">Delete</button>
-				</div>
-			</li>
-			<br>
-			<hr>
+	<div class="col-sm-12" id="single-course-header">
+		<h1>{{courseName}}</h1>
+<!-- 		<select ng-init="selectedGradeStyle = styles[0]" ng-model="selectedGradeStyle" ng-options="style for style in styles" ng-change="recalculate()">
+		</select> -->
+	</div>
+	<br>
+	<div id="single-course-view-container" class="col-sm-7">
+		<ul ng-repeat="ass in assignments track by ass.id" id="assignment-list">
+			<div ng-class="{red: wasAssignmentClicked(ass)}" id="single-assignment-list-item">
+				<li ng-class="enteringGrade ? 'disabled' : 'enabled'" >
+					<div class="col-sm-7 col-lg-10">
+						<span class="col-sm-6 course-name">{{ass.name}}</span>
+						<span class="col-sm-6 course-grade"><strong>{{ass.pointsEarned}}/{{ass.possiblePoints}}</strong></span>
+					</div>
+					<div class="col-sm-5 col-lg-2 single-course-delete-btns">
+						<button class="btn btn-sm btn-secondary" ng-click="showNewGradeField(ass)" ng-class="enteringGrade ? 'disabled' : ''" ng-model="clicked" class="">Change Grade</button>
+						<button class="btn btn-sm btn-danger" ng-click="deleteAssignment(ass.id)" 
+							ng-class="">Delete</button>
+					</div>
+				</li>
+				<br>
+			</div>
+		</ul>
+	</div>
+
+
+	<div class="col-sm-4">
+		<div id="chartDiv"></div>
+	</div>
+
+	<br>
+
+	<div class="col-sm-12">
+		<div>
+			<input id="new-grade-btn" type="number" ng-model="updatedGrade" ng-show="enteringGrade" placeholder="New Grade For {{clickedAssignment.name}}">
+			<button  ng-show="enteringGrade" ng-click="updateGrade()"><span class="glyphicon glyphicon-check" ></span></button>
+			<button ng-show="enteringGrade" ng-click="cancel()"><span>Cancel</span></button>
 		</div>
-	</ul>
+		<div id="single-course-btns">
+			<h2 >Final Grade: {{finalGrade}} </h2>
+			<select ng-init="selectedGradeStyle = styles[0]" ng-model="selectedGradeStyle" ng-options="style for style in styles" ng-change="recalculate()"></select>
+			<br>
+			<button class="btn btn-primary" ng-click="openNewAssignmentModal()">New Assignment</button>
+		</div>
+	</div>
 </div>
-<div>
-<input id="new-grade-btn" type="number" ng-model="updatedGrade" ng-show="enteringGrade" placeholder="New Grade For {{clickedAssignment.name}}">
-<button  ng-show="enteringGrade" ng-click="updateGrade()"><span class="glyphicon glyphicon-check" ></span></button>
-<button ng-show="enteringGrade" ng-click="cancel()"><span>Cancel</span></button>
-</div>
-
-<h2 >Final Grade: {{finalGrade}} </h2>
-
-<button class="btn btn-primary" ng-click="openNewAssignmentModal()">New Assignment</button>
-
-<div ng-include="'partials/MODAL_newAssignment.html'"></div>
-</div>
+		<div ng-include="'partials/MODAL_newAssignment.html'"></div>
