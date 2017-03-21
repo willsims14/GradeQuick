@@ -259,7 +259,49 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
     }
 
 
+    function getWeightedGPA(myCourses){
+        let cumulativeGPA = 0.0;
+        var i = 0;
+
+		// Get GPA for a semester
+		for(i = 0; i < myCourses.length; i++){
+		    if(myCourses[i].finalAccumulated > 90){
+		        cumulativeGPA += 4.0;
+		    }else if(myCourses[i].finalAccumulated > 80){
+		        cumulativeGPA += 3.0;
+		    }else if(myCourses[i].finalAccumulated > 72){
+		        cumulativeGPA += 2.0;
+		    }else if(myCourses[i].finalAccumulated > 65){
+		        cumulativeGPA += 1.0;
+		    }else{
+		        cumulativeGPA += 0.0;
+		    }
+		}
+		return cumulativeGPA;	
+    }
+
+    function getCumulativeGPA(myCourses){
+	    let weightedGPA = 0.0;
+	    let i = 0;
+
+	    for(i = 0; i < myCourses.length; i++){
+	        if(myCourses[i].finalWeighted > 90){
+	            weightedGPA += 4.0;
+	        }else if(myCourses[i].finalWeighted > 80){
+	            weightedGPA += 3.0;
+	        }else if(myCourses[i].finalWeighted > 72){
+	            weightedGPA += 2.0;
+	        }else if(myCourses[i].finalWeighted > 65){
+	            weightedGPA += 1.0;
+	        }else{
+	            weightedGPA += 0.0;
+	        }
+	    }
+	    return weightedGPA;
+    }
 
 
-	return {updateCourseGrades, getCourseObject, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
+
+
+	return {getCumulativeGPA, getWeightedGPA, updateCourseGrades, getCourseObject, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
 });

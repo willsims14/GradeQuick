@@ -6,6 +6,7 @@
 
 #profile-buttons{
 	text-align: center;
+	margin-top: 7.5%;
 }
 
 /* Splash Page Styling */
@@ -57,17 +58,36 @@
 	list-style: none;
 	padding: none;
 	margin: none;
+	line-height: 2.5em;
+	text-align: left;
 }
-#course-list li{
-
+#course-list li a{
+	color: #020202;
+	text-decoration-color: none;
 }
 #profile-header{
 	text-align: center;
 }
 
-#course-list-container{
+#main-container{
 
 	text-align: center;
+}
+
+#course-list-container{
+	border: 2px solid black;
+	padding: 0 1%;
+	margin-left: -2%;
+	background-color: #89898A;
+	margin-right: 2%;
+	padding-bottom: 1%;
+}
+
+#delete-course-btns{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-content: center;
 }
 
 .alert{
@@ -75,7 +95,35 @@
 	padding: none;
 	padding: 5px;
 }
+#main-container{
+	height: 100%;
+}
+.delete-course-btn{
+	padding: 5px 10px;
+	margin: 0 10px;
+}
 
+#selector-container{
+	line-height: 2em;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+	margin-right: 2%;
+	margin-top: 5%;
+	padding-bottom: auto;
+}
+
+#selector-container h3{
+	padding: 0px;
+	margin: 0px;
+	text-decoration: underline;
+}
+#course-header{
+	margin: 10px 5%;
+	text-align: left;
+
+	color: #020202;
+}
 
 /**********/
 /* MODALS */
