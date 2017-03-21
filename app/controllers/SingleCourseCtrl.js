@@ -1,6 +1,6 @@
 "use strict";
 
-app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $routeParams){
+app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, GradeStorage, $routeParams){
 
 	// Scope Variables
 	$scope.enteringGrade = false;
@@ -27,6 +27,9 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 		$scope.assignments = assignments;
 		$scope.recalculate();
 	});
+
+
+
 
 	$scope.wasAssignmentClicked = function(assignment){
 		for(var i in $scope.assignments){
@@ -153,7 +156,8 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 
     $scope.recalculate = function(){
 		var finalGrade = 0.0;
-
+		$("#chartDiv").html("");
+		
 		console.log("selectedGradeStyle: ", $scope.selectedGradeStyle);
 
 		if($scope.assignments.length === 0){
@@ -162,9 +166,17 @@ app.controller("SingleCourseCtrl", function($scope, AuthFactory, GradeStorage, $
 			if($scope.selectedGradeStyle === "Cumulative Average"){
 				finalGrade = GradeStorage.calcCumulativeAvg($scope.assignments);
 				$scope.finalGrade = finalGrade.toFixed(2) + "%";
+
+				var bar = ChartFactory.getBar(finalGrade);
+				bar.setText($scope.finalGrade);
+				bar.animate(finalGrade / 100);
 			}else if($scope.selectedGradeStyle === "Weighted Average"){
 				finalGrade = GradeStorage.calcWeightedAvg($scope.assignments);
 				$scope.finalGrade = finalGrade.toFixed(2) + "%";
+
+				var bar = ChartFactory.getBar(finalGrade);
+				bar.setText($scope.finalGrade);
+				bar.animate(finalGrade / 100);
 			}else{
 				console.log("ELSE OCCURRED");
 			}
