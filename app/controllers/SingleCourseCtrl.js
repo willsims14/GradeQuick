@@ -64,7 +64,9 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 		}
 
 		if($scope.newAssignment.pointsEarned){
-			console.log("POINTS WERE EARNED: ", $scope.newAssignment.pointsEarned);
+			console.log("Assignments: ", $scope.assignments);
+
+
 		}else{
 			$scope.newAssignment.pointsEarned = "*";
 		}
@@ -74,7 +76,21 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 			GradeStorage.getCourseAssignments(selectedCourse)
 			.then( function(assignments){
 				$scope.assignments = assignments;
-				$scope.recalculate();
+				GradeStorage.getCourseObject(selectedCourse)
+				.then( function(courseObj){
+		    		let myCourse = courseObj.info;
+
+					let accumulatedCourseGrade = GradeStorage.calcCumulativeAvg($scope.assignments);
+		    		let weightedCourseGrade = GradeStorage.calcWeightedAvg($scope.assignments);
+
+		    		myCourse.finalAccumulated = accumulatedCourseGrade;
+		    		myCourse.finalWeighted = weightedCourseGrade;
+
+		    		GradeStorage.updateCourseGrades(myCourse, selectedCourse)
+		    		.then( function(msg){
+						$scope.recalculate();
+		    		});
+				});
 			});			
 		}).catch( function(error){
 			console.log("ERROR: ", error);
@@ -95,7 +111,6 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 
 	// Shows input field for entering a new grade
 	$scope.showNewGradeField = function(assignment){
-		console.log("Assignment: ", assignment);
         $scope.assignmentToUpdate = assignment;
 		$scope.enteringGrade = true;
 		$scope.clickedAssignment = assignment;
@@ -121,7 +136,6 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
     		GradeStorage.updateCourseGrades(myCourse, selectedCourse)
     		.then( (msg) => {
 
-    			console.log("Message: ", msg);
 
 		        var updatedAssignment = $scope.assignmentToUpdate;
 		        updatedAssignment.pointsEarned = $scope.updatedGrade;
@@ -156,9 +170,10 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 
     $scope.recalculate = function(){
 		var finalGrade = 0.0;
+		var bar;
+
+		// Clear the chart's div to prepare for new chart
 		$("#chartDiv").html("");
-		
-		console.log("selectedGradeStyle: ", $scope.selectedGradeStyle);
 
 		if($scope.assignments.length === 0){
 			$scope.finalGrade = "No Grades Yet!";
@@ -167,14 +182,14 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 				finalGrade = GradeStorage.calcCumulativeAvg($scope.assignments);
 				$scope.finalGrade = finalGrade.toFixed(2) + "%";
 
-				var bar = ChartFactory.getBar(finalGrade);
+				bar = ChartFactory.getBar(finalGrade);
 				bar.setText($scope.finalGrade);
 				bar.animate(finalGrade / 100);
 			}else if($scope.selectedGradeStyle === "Weighted Average"){
 				finalGrade = GradeStorage.calcWeightedAvg($scope.assignments);
 				$scope.finalGrade = finalGrade.toFixed(2) + "%";
 
-				var bar = ChartFactory.getBar(finalGrade);
+				bar = ChartFactory.getBar(finalGrade);
 				bar.setText($scope.finalGrade);
 				bar.animate(finalGrade / 100);
 			}else{
