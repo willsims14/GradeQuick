@@ -1,6 +1,6 @@
 "use strict";
 
-app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
+app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSettings){
 
 /*************************/
 /****** Courses ******/
@@ -263,15 +263,22 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
         let cumulativeGPA = 0.0;
         var i = 0;
 
+
+
 		// Get GPA for a semester
 		for(i = 0; i < myCourses.length; i++){
-		    if(myCourses[i].finalAccumulated > 90){
+
+	        let courseSettings = myCourses[i].gradeRange;
+
+	        console.log("CourseSettings: ", courseSettings);
+
+		    if(myCourses[i].finalAccumulated >= courseSettings.A.min){
 		        cumulativeGPA += 4.0;
-		    }else if(myCourses[i].finalAccumulated > 80){
+		    }else if(myCourses[i].finalAccumulated >= courseSettings.B.min){
 		        cumulativeGPA += 3.0;
-		    }else if(myCourses[i].finalAccumulated > 72){
+		    }else if(myCourses[i].finalAccumulated >= courseSettings.C.min){
 		        cumulativeGPA += 2.0;
-		    }else if(myCourses[i].finalAccumulated > 65){
+		    }else if(myCourses[i].finalAccumulated >= courseSettings.D.min){
 		        cumulativeGPA += 1.0;
 		    }else{
 		        cumulativeGPA += 0.0;
@@ -284,14 +291,20 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q){
 	    let weightedGPA = 0.0;
 	    let i = 0;
 
+
 	    for(i = 0; i < myCourses.length; i++){
-	        if(myCourses[i].finalWeighted > 90){
+	    	
+	        let courseSettings = myCourses[i].gradeRange;
+
+	        console.log("CourseSettings: ", courseSettings);
+
+	        if(myCourses[i].finalWeighted >= 90){
 	            weightedGPA += 4.0;
-	        }else if(myCourses[i].finalWeighted > 80){
+	        }else if(myCourses[i].finalWeighted >= 80){
 	            weightedGPA += 3.0;
-	        }else if(myCourses[i].finalWeighted > 72){
+	        }else if(myCourses[i].finalWeighted >= 72){
 	            weightedGPA += 2.0;
-	        }else if(myCourses[i].finalWeighted > 65){
+	        }else if(myCourses[i].finalWeighted >= 65){
 	            weightedGPA += 1.0;
 	        }else{
 	            weightedGPA += 0.0;

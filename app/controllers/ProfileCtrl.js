@@ -1,7 +1,7 @@
 "use strict";
 
 
-app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeStorage){
+app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactory, GradeStorage){
 	// Get userId from URL 
 	var myParams = $routeParams;
     $scope.userId = myParams.userId;
@@ -91,6 +91,8 @@ app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeS
     };
 
 
+
+
     $scope.getGPA = function(){
         $scope.semester.filter = $scope.semester.selectedSemester;
         if($scope.semester.selectedSemester === "All Courses"){
@@ -119,6 +121,13 @@ app.controller("ProfileCtrl", function($scope, $routeParams, AuthFactory, GradeS
         }
 
     };
+
+    $scope.goToCourseSettings = function(courseId){
+        $window.location.href = `#!/settings/${courseId}`;
+        $routeParams.courseName = "x";
+    };
+
+
 });
 
 // END

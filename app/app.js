@@ -29,10 +29,9 @@ app.config(function($routeProvider){
         controller: 'SingleCourseCtrl',
         resolve: {isAuth}
     }).
-    when('/:userId/settings', {
+    when('/settings/:courseId', {
         templateUrl: 'partials/settings.html',
-        controller: 'SettingsCtrl',
-        resolve: {isAuth}
+        controller: 'SettingsCtrl'
     }).
     when('/:userId/whatif', {
         templateUrl: 'partials/WhatDoINeed.html',
