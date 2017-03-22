@@ -33,12 +33,12 @@
 
 .red{
 	color: black;
-	background-color: yellow;
-	padding: 1%;
+	background-color: lightyellow;
+	padding: 1% 0;
 }
 
 .disabled{
-	color: #808080;
+	color: #696969;
 }
 
 .enabled{
@@ -53,9 +53,11 @@
 
 
 #single-assignment-list-item li{
+
 	margin: 0px;
 	padding: 0px;
-	margin-top: 2%;
+	margin: 1% 0;
+
 }
 
 #course-list{
@@ -105,6 +107,11 @@
 	text-decoration: underline;
 }
 
+#update-grade-container{
+
+	line-height: 2em;
+	margin-left: 2%;
+}
 
 #single-course-header h1{
 	text-align: center;
@@ -142,12 +149,18 @@
 	padding: none;
 	padding: 5px;
 }
+
 #main-container{
 	height: 100%;
 }
 .delete-course-btn{
 	padding: 5px 10px;
 	margin: 0 10px;
+}
+
+#invalid-grade-warning{
+	margin-top: 5px;
+	padding: 10px 0px;
 }
 
 #selector-container{
@@ -203,3 +216,13 @@
 	line-height: 2em;
 }
 
+#chartDiv{
+	max-height: 300px;
+	max-width: 300px;
+	text-align: center;
+}
+
+#chartDiv svg{
+	max-height: 300px;
+	max-width: 300px;
+}

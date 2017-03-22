@@ -5,15 +5,18 @@
 		</select> -->
 	</div>
 	<br>
-	<div id="single-course-view-container" class="col-sm-7">
+	<div class="col-sm-7 col-lg-5">
+	<div id="single-course-view-container" >
+		<h3>Assignments</h3>
+		<hr>
 		<ul ng-repeat="ass in assignments track by ass.id" id="assignment-list">
 			<div ng-class="{red: wasAssignmentClicked(ass)}" id="single-assignment-list-item">
 				<li ng-class="enteringGrade ? 'disabled' : 'enabled'" >
-					<div class="col-sm-7 col-lg-10">
+					<div class="col-sm-7 col-lg-9">
 						<span class="col-sm-6 course-name">{{ass.name}}</span>
 						<span class="col-sm-6 course-grade"><strong>{{ass.pointsEarned}}/{{ass.possiblePoints}}</strong></span>
 					</div>
-					<div class="col-sm-5 col-lg-2 single-course-delete-btns">
+					<div class="col-sm-5 col-lg-3 single-course-delete-btns">
 						<button class="btn btn-sm btn-secondary" ng-click="showNewGradeField(ass)" ng-class="enteringGrade ? 'disabled' : ''" ng-model="clicked" class="">Change Grade</button>
 						<button class="btn btn-sm btn-danger" ng-click="deleteAssignment(ass.id)" 
 							ng-class="">Delete</button>
@@ -23,19 +26,25 @@
 			</div>
 		</ul>
 	</div>
-
-
-	<div class="col-sm-4">
-		<div id="chartDiv"></div>
 	</div>
 
+	<div class="col-sm-1 col-lg-2"></div>
+	<div class="col-sm-5 col-lg-3" >
+		<span id="chartDiv"></span>
+	</div>
+	<div class="col-sm-1 col-lg-2"></div>
+	<br>
 	<br>
 
-	<div class="col-sm-12">
-		<div>
+	<div class="col-sm-6">
+		<div id="update-grade-container">
 			<input id="new-grade-btn" type="number" ng-model="updatedGrade" ng-show="enteringGrade" placeholder="New Grade For {{clickedAssignment.name}}">
-			<button  ng-show="enteringGrade" ng-click="updateGrade()"><span class="glyphicon glyphicon-check" ></span></button>
-			<button ng-show="enteringGrade" ng-click="cancel()"><span>Cancel</span></button>
+			<button class="btn btn-sm btn-primary"  ng-show="enteringGrade" ng-click="updateGrade()">Submit</button>
+			<button ng-show="enteringGrade" ng-click="cancel()" class="btn btn-sm btn-danger"><span>Cancel</span></button>
+			<br>
+			<div id="invalid-grade-warning" ng-show="invalidGrade"><span  class="alert alert-warning" >
+	  			<strong>Warning!</strong> You need to enter a number value for a grade.
+			</span></div>
 		</div>
 		<div id="single-course-btns">
 			<h2 >Final Grade: {{finalGrade}} </h2>

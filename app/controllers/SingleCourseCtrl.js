@@ -11,6 +11,7 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 	$scope.assignments = [];
 	$scope.clickedAssignment = {};
 	$scope.clickedAssignment.id = "";
+	$scope.invalidGrade = false;
 	// Local Variables
 	var selectedCourse = $routeParams.courseId;
 	var user = AuthFactory.getUser();
@@ -119,52 +120,61 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 
 	// Makes call to firebase to update a grade on an assignment
     $scope.updateGrade = function(){
-    	console.log("Clicked Assignment: ", selectedCourse);
+    	console.log("Clicked Assignment: ", $scope.updatedGrade);
 
-    	GradeStorage.getCourseObject(selectedCourse)
-    	.then( function(courseObj) {
-    		let myCourse = courseObj.info;
-    		let courseAssignments = Object.values(courseObj.assignments);
+    	if(!$scope.updatedGrade){
+    		$scope.invalidGrade = true;
+    		return;
+    	}else if(parseFloat($scope.updatedGrade) < 0){
+    		$scope.invalidGrade = true;
+    		return;
+    	}else{
+	    	$scope.invalidGrade = false;
+	    	$scope.enteringGrade = false;
+	    	GradeStorage.getCourseObject(selectedCourse)
+	    	.then( function(courseObj) {
+	    		let myCourse = courseObj.info;
+	    		let courseAssignments = Object.values(courseObj.assignments);
 
-    		let accumulatedCourseGrade = GradeStorage.calcCumulativeAvg(courseAssignments);
-    		let weightedCourseGrade = GradeStorage.calcWeightedAvg(courseAssignments);
+	    		let accumulatedCourseGrade = GradeStorage.calcCumulativeAvg(courseAssignments);
+	    		let weightedCourseGrade = GradeStorage.calcWeightedAvg(courseAssignments);
 
-    		myCourse.finalAccumulated = accumulatedCourseGrade;
-    		myCourse.finalWeighted = weightedCourseGrade;
+	    		myCourse.finalAccumulated = accumulatedCourseGrade;
+	    		myCourse.finalWeighted = weightedCourseGrade;
 
-    		// Update Course to reflect newly calculated final grade values
-    		GradeStorage.updateCourseGrades(myCourse, selectedCourse)
-    		.then( (msg) => {
-
-
-		        var updatedAssignment = $scope.assignmentToUpdate;
-		        updatedAssignment.pointsEarned = $scope.updatedGrade;
-		        updatedAssignment.weightedGradePercentage = (updatedAssignment.pointsEarned / updatedAssignment.possiblePoints) * 100;
-				$scope.enteringGrade = false;
-
-				console.log("UpdatedAssignment: ", updatedAssignment);
-
-		        if(updatedAssignment.pointsEarned > updatedAssignment.possiblePoints){
-					console.log("CANT EARN MORE POINTS THAN POSSIBLE");
-					$("#new-grade-btn").html(" ");
-					return;
-		        }
-
-		        GradeStorage.recordNewGrade(updatedAssignment.id, updatedAssignment)
-		        .then( function(){
-		        	GradeStorage.getCourseAssignments(selectedCourse)
-					.then( function(assignments){
-						$("#new-grade-btn").val(" ");
-						$scope.assignments = assignments;
-						$scope.recalculate();
-					});
-		        });
+	    		// Update Course to reflect newly calculated final grade values
+	    		GradeStorage.updateCourseGrades(myCourse, selectedCourse)
+	    		.then( (msg) => {
 
 
-    		});
+			        var updatedAssignment = $scope.assignmentToUpdate;
+			        updatedAssignment.pointsEarned = $scope.updatedGrade;
+			        updatedAssignment.weightedGradePercentage = (updatedAssignment.pointsEarned / updatedAssignment.possiblePoints) * 100;
+					
 
-    	});
+					console.log("UpdatedAssignment: ", updatedAssignment);
 
+			        if(updatedAssignment.pointsEarned > updatedAssignment.possiblePoints){
+						console.log("CANT EARN MORE POINTS THAN POSSIBLE");
+						$("#new-grade-btn").html(" ");
+						return;
+			        }
+
+			        GradeStorage.recordNewGrade(updatedAssignment.id, updatedAssignment)
+			        .then( function(){
+			        	GradeStorage.getCourseAssignments(selectedCourse)
+						.then( function(assignments){
+							$("#new-grade-btn").val(" ");
+							$scope.assignments = assignments;
+							$scope.recalculate();
+					    	$scope.enteringGrade = false;
+					    	$scope.clickedAssignment = "";
+					    	$scope.updatedGrade = undefined;
+						});
+			        });
+	    		});
+	    	});
+    	}
     };
     
 
@@ -201,6 +211,8 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
     $scope.cancel = function(){
     	$scope.enteringGrade = false;
     	$scope.clickedAssignment = "";
+    	$scope.updatedGrade = undefined;
+    	$scope.invalidGrade = false;
     };
 
 
