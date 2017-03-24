@@ -1,7 +1,7 @@
 "use strict";
 
 
-app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactory, GradeStorage){
+app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactory, GradeStorage, CourseSettings){
 	// Get userId from URL 
 	var myParams = $routeParams;
     $scope.userId = myParams.userId;
@@ -13,6 +13,11 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     $scope.styles = ["Weighted Average", "Cumulative Average"];
     $scope.semesters = [];
     $scope.showGPA = false;
+    $scope.semesters = [];
+
+    let DefaultCourseSettings = CourseSettings.DefaultCourseSettings;
+
+    console.log("Default: ", DefaultCourseSettings);
 
 
 
@@ -25,13 +30,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     	.then( function(courses){
             $scope.courses = courses;
             console.log("Courses: ", courses);
-            var localSemesters = [];
-            // Gets all semesters that the user has been a student for
-            for(var i = 0; i < $scope.courses.length; i++){
-                localSemesters.push($scope.courses[i].semester);
-            }
-            // Removes duplicate semesters
-            localSemesters = jQuery.unique(localSemesters);
+            var localSemesters = GradeStorage.getUserSemesters(courses);
             localSemesters.unshift("All Courses");
             $scope.semesters = localSemesters;
             $scope.semester.selectedSemester = $scope.semesters[0];
@@ -55,6 +54,9 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
         $scope.course.year = semesterInfo.year;
         $scope.course.season = semesterInfo.season;
     	$scope.course.userId = AuthFactory.getUser();
+        $scope.course.gradeRange = DefaultCourseSettings;
+
+
 
         console.log("INFO: ", semesterInfo);
         console.log("$Scope.course:  ", $scope.course);
@@ -64,6 +66,9 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     		GradeStorage.getUserCourses()
     		.then( function(courses){
     			$scope.courses = courses;
+                var localSemesters = GradeStorage.getUserSemesters(courses);
+                localSemesters.unshift("All Courses");
+                $scope.semesters = localSemesters;
     		});
     	});
     	$scope.course = {};

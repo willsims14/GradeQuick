@@ -9,13 +9,7 @@ app.controller("SettingsCtrl", function($scope, $routeParams, AuthFactory, Grade
     // Used to SHOWING course's current grade range
     $scope.myRange = null;
 
-    let DefaultCourseRange = {
-		A : { min: 91, max: 100 },
-		B : { min: 81, max:  90 },
-		C : { min: 72, max:  80 },
-		D : { min: 65, max:  71 },
-		F : { min:  0, max:  59 }
-	};
+    let DefaultCourseRange = CourseSettings.DefaultCourseSettings;
 
     GradeStorage.getCourseObject($scope.courseId)
     .then( function(courseObj){

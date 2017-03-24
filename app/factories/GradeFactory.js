@@ -28,6 +28,22 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 		});
 	};
 
+	let getUserSemesters = (courses) => {
+
+		let myCourses = courses;
+        var localSemesters = [];
+
+        // Gets all semesters that the user has been a student for
+        for(var i = 0; i < courses.length; i++){
+            localSemesters.push(myCourses[i].semester);
+        }
+        
+        // Removes duplicate semesters
+        localSemesters = jQuery.unique(localSemesters);
+        console.log("LocalFacorySemesters: ", localSemesters);
+        return localSemesters;
+    };
+
 	let getCourseName = (courseId) => {
 		let courseName = "";
 		let user = AuthFactory.getUser();
@@ -316,5 +332,5 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 
 
 
-	return {getCumulativeGPA, getWeightedGPA, updateCourseGrades, getCourseObject, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
+	return {getUserSemesters, getCumulativeGPA, getWeightedGPA, updateCourseGrades, getCourseObject, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
 });
