@@ -37,7 +37,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
         for(var i = 0; i < courses.length; i++){
             localSemesters.push(myCourses[i].semester);
         }
-        
+
         // Removes duplicate semesters
         localSemesters = jQuery.unique(localSemesters);
         console.log("LocalFacorySemesters: ", localSemesters);
@@ -300,12 +300,18 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 		        cumulativeGPA += 0.0;
 		    }
 		}
-		return cumulativeGPA;	
+		return 1.0 * (cumulativeGPA / myCourses.length);	
     }
 
     function getCumulativeGPA(myCourses){
 	    let weightedGPA = 0.0;
 	    let i = 0;
+
+	    console.log("MyCOurses: ", myCourses);
+
+	    if(myCourses.length === 0){
+	    	return "error";
+	    }
 
 
 	    for(i = 0; i < myCourses.length; i++){
@@ -314,19 +320,22 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 
 	        console.log("CourseSettings: ", courseSettings);
 
-	        if(myCourses[i].finalWeighted >= 90){
+	        if(myCourses[i].finalWeighted >= courseSettings.A.min){
 	            weightedGPA += 4.0;
-	        }else if(myCourses[i].finalWeighted >= 80){
+	        }else if(myCourses[i].finalWeighted >= courseSettings.B.min){
 	            weightedGPA += 3.0;
-	        }else if(myCourses[i].finalWeighted >= 72){
+	        }else if(myCourses[i].finalWeighted >= courseSettings.C.min){
 	            weightedGPA += 2.0;
-	        }else if(myCourses[i].finalWeighted >= 65){
+	        }else if(myCourses[i].finalWeighted >= courseSettings.D.min){
 	            weightedGPA += 1.0;
 	        }else{
 	            weightedGPA += 0.0;
 	        }
 	    }
-	    return weightedGPA;
+	    console.log("Total: ", weightedGPA);
+	    console.log("Length: ", myCourses.length);
+	    console.log("Equals: ", weightedGPA / myCourses.length);
+	    return 1.0 * (weightedGPA / myCourses.length);
     }
 
 

@@ -11,10 +11,10 @@
 		<div id="selector-container" class="col-sm-4 col-md-4 col-lg-4">
 			<h3>{{semester.selectedSemester}}</h3>
 			<div >
-				<h4 ng-show="showGPA"><strong>GPA: {{semester.GPA}}</strong></h4>
+				<h4><strong>GPA: {{semester.GPA}}</strong></h4>
 				<strong>Filter By Semester:</strong> <br><select ng-model="semester.selectedSemester" ng-options="x for x in semesters" ng-change="getGPA(semester)" ng-init="semester.selectedSemester = semesters[0]">
 				</select><br>
-				<div ng-show="showGPA"><strong>Style of GPA Calculation: </strong><br><select ng-model="gradeStyle" ng-change="getGPA(gradeStyle)" ng-options="style for style in styles" ng-init="gradeStyle = styles[0]"></select></div>
+				<div><strong>Style of GPA Calculation: </strong><br><select ng-model="gradeStyle" ng-change="getGPA(gradeStyle)" ng-options="style for style in styles" ng-init="gradeStyle = styles[0]"></select></div>
 			</div>
 		</div>
 		<br>

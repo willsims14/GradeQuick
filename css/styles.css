@@ -85,7 +85,7 @@
 	padding: 0px;
 	margin: 0px;
 	line-height: 2em;
-	padding-bottom: 1%;
+	padding: 2% 2% 5% 2%;
 	background-color: #89898A;
 	color: #020202;
 	font-size: 1.05em;
@@ -98,6 +98,13 @@
 	text-align: center;
 	margin: 5% 0;
 }
+
+#giant-chart-container{
+	margin: 0;
+	margin-top: auto;
+	height: auto;
+}
+
 #single-course-btns h2{
 	padding: 0px;
 	margin: 0px;
