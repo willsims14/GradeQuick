@@ -40,8 +40,24 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 
         // Removes duplicate semesters
         localSemesters = jQuery.unique(localSemesters);
-        console.log("LocalFacorySemesters: ", localSemesters);
         return localSemesters;
+    };
+
+    let getCoursesBySemester = (semester) => {
+    	let courses = [];
+    	let semesters = {};
+		return $q((resolve, reject) => {
+			$http.get(`${FBCreds.databaseURL}/courses.json?orderBy="semester"&equalTo="${semester}"`)
+			.then((coursesObj) => {
+				console.log("Courses Object: ", coursesObj.data);
+				let coursesCollection = coursesObj.data;
+				coursesCollection.semesterName = semester;
+				resolve(coursesCollection);
+			})
+			.catch((error) => {
+				reject(error);
+			});
+		});
     };
 
 	let getCourseName = (courseId) => {
@@ -307,7 +323,6 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 	    let weightedGPA = 0.0;
 	    let i = 0;
 
-	    console.log("MyCOurses: ", myCourses);
 
 	    if(myCourses.length === 0){
 	    	return "error";
@@ -318,7 +333,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 	    	
 	        let courseSettings = myCourses[i].gradeRange;
 
-	        console.log("CourseSettings: ", courseSettings);
+
 
 	        if(myCourses[i].finalWeighted >= courseSettings.A.min){
 	            weightedGPA += 4.0;
@@ -338,8 +353,12 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 	    return 1.0 * (weightedGPA / myCourses.length);
     }
 
+    function getTotalGPA(semesters){
+
+    }
 
 
 
-	return {getUserSemesters, getCumulativeGPA, getWeightedGPA, updateCourseGrades, getCourseObject, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
+
+	return {getCoursesBySemester, getUserSemesters, getCumulativeGPA, getWeightedGPA, updateCourseGrades, getCourseObject, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
 });

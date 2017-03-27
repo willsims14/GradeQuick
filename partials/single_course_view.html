@@ -17,7 +17,7 @@
 						<span class="col-sm-4 course-grade"><strong>{{ass.pointsEarned}}/{{ass.possiblePoints}}</strong></span>
 					</div>
 					<div class="col-sm-4 col-lg-3 single-course-delete-btns">
-						<button class="btn btn-sm btn-secondary" ng-click="showNewGradeField(ass)" ng-class="enteringGrade ? 'disabled' : ''" ng-model="clicked" class="">Change Grade</button>
+						<button class="btn btn-sm btn-default" ng-click="showNewGradeField(ass)" ng-class="enteringGrade ? 'disabled' : ''" ng-model="clicked" class="">Change Grade</button>
 						<button class="btn btn-sm btn-danger" ng-click="deleteAssignment(ass.id)" 
 							ng-class="">Delete</button>
 					</div>
@@ -45,7 +45,7 @@
 			<button ng-show="enteringGrade" ng-click="cancel()" class="btn btn-sm btn-danger"><span>Cancel</span></button>
 			<br>
 			<div id="invalid-grade-warning" ng-show="invalidGrade"><span  class="alert alert-warning" >
-	  			<strong>Warning!</strong> You need to enter a number value for a grade.
+	  			<strong>Uh Oh!</strong> You need to enter a number value for a grade.
 			</span></div>
 		</div>
 		<div id="single-course-btns">
