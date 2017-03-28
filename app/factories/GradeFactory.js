@@ -40,9 +40,28 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 
         // Removes duplicate semesters
         localSemesters = jQuery.unique(localSemesters);
-        console.log("LocalFacorySemesters: ", localSemesters);
         return localSemesters;
     };
+
+    let getCoursesBySemester = (semester) => {
+    	let courses = [];
+    	let semesters = {};
+    	let coursesCollection = {semester: "x"};
+		return $q((resolve, reject) => {
+			$http.get(`${FBCreds.databaseURL}/courses.json?orderBy="semester"&equalTo="${semester}"`)
+			.then((coursesObj) => {
+
+				console.log("CourseObj: ", coursesObj);
+				coursesCollection = coursesObj.data;
+				resolve(coursesCollection);
+			})
+			.catch((error) => {
+				reject(error);
+			});
+		});
+    };
+
+
 
 	let getCourseName = (courseId) => {
 		let courseName = "";
@@ -284,33 +303,42 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 		// Get GPA for a semester
 		for(i = 0; i < myCourses.length; i++){
 
-	        let courseSettings = myCourses[i].gradeRange;
+			if(Object.values(myCourses[i]).length > 0){
 
-	        console.log("CourseSettings: ", courseSettings);
+		        let courseSettings = myCourses[i].gradeRange;
 
-		    if(myCourses[i].finalAccumulated >= courseSettings.A.min){
-		        cumulativeGPA += 4.0;
-		    }else if(myCourses[i].finalAccumulated >= courseSettings.B.min){
-		        cumulativeGPA += 3.0;
-		    }else if(myCourses[i].finalAccumulated >= courseSettings.C.min){
-		        cumulativeGPA += 2.0;
-		    }else if(myCourses[i].finalAccumulated >= courseSettings.D.min){
-		        cumulativeGPA += 1.0;
-		    }else{
-		        cumulativeGPA += 0.0;
-		    }
+
+
+		        console.log("CourseSettings: ", courseSettings);
+
+
+			    if(myCourses[i].finalAccumulated >= courseSettings.A.min){
+			        cumulativeGPA += 4.0;
+			    }else if(myCourses[i].finalAccumulated >= courseSettings.B.min){
+			        cumulativeGPA += 3.0;
+			    }else if(myCourses[i].finalAccumulated >= courseSettings.C.min){
+			        cumulativeGPA += 2.0;
+			    }else if(myCourses[i].finalAccumulated >= courseSettings.D.min){
+			        cumulativeGPA += 1.0;
+			    }else{
+			        cumulativeGPA += 0.0;
+			    }
+				console.log("MyCourse: ", myCourses[i].name);
+				console.log("Grade: ", 1.0 * (cumulativeGPA / myCourses.length));
+				return 1.0 * (cumulativeGPA / myCourses.length);
+			}else{
+				return 0;
+			}
 		}
-		return 1.0 * (cumulativeGPA / myCourses.length);	
     }
 
     function getCumulativeGPA(myCourses){
 	    let weightedGPA = 0.0;
 	    let i = 0;
 
-	    console.log("MyCOurses: ", myCourses);
 
 	    if(myCourses.length === 0){
-	    	return "error";
+	    	return 0;
 	    }
 
 
@@ -318,7 +346,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 	    	
 	        let courseSettings = myCourses[i].gradeRange;
 
-	        console.log("CourseSettings: ", courseSettings);
+	        console.log("myCourses[i]: ", myCourses[i]);
 
 	        if(myCourses[i].finalWeighted >= courseSettings.A.min){
 	            weightedGPA += 4.0;
@@ -341,5 +369,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 
 
 
-	return {getUserSemesters, getCumulativeGPA, getWeightedGPA, updateCourseGrades, getCourseObject, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
+
+
+	return {getCoursesBySemester, getUserSemesters, getCumulativeGPA, getWeightedGPA, updateCourseGrades, getCourseObject, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
 });
