@@ -102,49 +102,37 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
         console.log("Getting GPA: ", $scope.semesters);
 
         var mySemesters = {};
+        let length = $scope.semesters.length - 1;
         mySemesters.all = $scope.semesters;
+        let GPA = 0.0;
+
         var i, j;
 
-        for(i = 0; i < $scope.semesters.length + 0; i++){
-            console.log("Looking For: ", $scope.semesters[i]);
-            if($scope.semesters[i] === "All Courses"){
-                console.log("MATCHED-------------------");
-            }else{
-                GradeStorage.getCoursesBySemester($scope.semesters[i])
-                .then( createSemesterObject );
-            }
+        // For each semester, create an object to pass to GradeStorage
+        for(i = 0; i < mySemesters.all.length; i++){
+            GradeStorage.getCoursesBySemester(mySemesters.all[i])
+            .then( createObject );
         }
 
-        function createSemesterObject(courses){
-            // Get & Delete Semester's name from object
-            let semesterName = courses.semesterName;
-            delete courses.semesterName;
+        function createObject(semester){
+            let vals = Object.values(semester);
+            console.log("Vals: ", semester);
+            var GPAholder = [];
 
-            // Initialize new semester (as key/val pair)
-            mySemesters[semesterName] = {"weighted":[],"accumulated":[]};
-            let vals = Object.values(courses);
+            // Get GPA for newly created Object
+            if(GradeStorage.getCumulativeGPA(vals)){
+                let grade = GradeStorage.getCumulativeGPA(vals);
+                GPAholder.push(grade);
+
                 
-            for(var i = 0; i < vals.length; i++){
-                mySemesters[semesterName].weighted.push(vals[i].finalWeighted);
-                mySemesters[semesterName].accumulated.push(vals[i].finalAccumulated);
+                for(var j = 0; j < GPAholder.length; j++){
+                    GPA += GPAholder[j];
+                }
+
+                let newGPA = (GPA /length);
+                $scope.semester.GPA = newGPA.toFixed(2);
             }
-
-            // Write function to calculate final GPA
-            console.log("MySemesters: ", mySemesters);
-            $scope.semester.GPA = "N/A.. yet";
-
-
-
         }
-         
-        if($scope.gradeStyle === "Cumulative Average"){
-            console.log("CUMULATIVE");
-        }else if($scope.gradeStyle === "Weighted Average"){
-            console.log("WEIGHTED");
-        }else{
-            console.log("ERROR");
-        }
-
     };
 
     $scope.getGPA = function(){
@@ -170,11 +158,13 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
                 $scope.semester.GPA = (cumulativeGPA).toFixed(2);
 
             }else if($scope.gradeStyle === "Weighted Average"){
+                console.log("MyCourses!!: ", myCourses);
                 let weightedGPA = GradeStorage.getCumulativeGPA(myCourses);
                 if(weightedGPA <= 0 || weightedGPA > 4.05){
                     $scope.semester.GPA = "N/A";
                     return;
                 }
+                console.log("WeightedGPA: ", weightedGPA);
                 $scope.semester.GPA = (weightedGPA).toFixed(2);
             }else{
                 console.log("ERROR");
