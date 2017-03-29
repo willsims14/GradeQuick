@@ -10,18 +10,20 @@
 	<div id="main-container" class="row">
 		<div class="row">
 			<div id="selector-container" class="col-sm-4 col-md-4 col-lg-4">
-				<h3>{{semester.selectedSemester}}</h3>
-				<div >
-					<h4><strong>GPA: {{semester.GPA}}</strong></h4>
+				<div>
+					<h3 id="show-gpa-header"><strong>GPA: {{semester.GPA}}</strong></h3>
 					<strong>Filter By Semester:</strong> <br><select ng-model="semester.selectedSemester" ng-options="x for x in semesters" ng-change="getGPA(semester)" ng-init="semester.selectedSemester = semesters[0]">
 					</select><br>
-					<div><strong>Style of GPA Calculation: </strong><br><select ng-model="gradeStyle" ng-change="getGPA(gradeStyle)" ng-options="style for style in styles" ng-init="gradeStyle = styles[0]"></select></div>
+
 				</div>
 			</div>
 			<br>
 
-			<div class="col-sm-7 col-md-7 col-lg-4" id="course-list-container">
-				<h3 id="course-header">Your Courses</h3>
+			<div class="col-sm-7 col-md-7 col-lg-4 bg-info clearfix" id="course-list-container">
+				<div class="row">
+					<h3 id="course-header" class="col-sm-10">{{semester.selectedSemester}}</h3>
+					<div id="add-course-btn" class="col-sm-2"><span class="btn btn-default glyphicon glyphicon-pencil" aria-hidden="true" ng-click="openNewCourseModal()"></span></div>
+				</div>
 				<hr>
 				<ul ng-repeat="course in courses | filter: semester.filter" id="course-list">
 					<li class=" course-row row">
@@ -39,14 +41,12 @@
 			</div >	
 			<div class="col-sm-4"></div>
 		</div>
-
+				<div id="profile-buttons" class="col-sm-12 col-lg-12"><br>
+					<a ng-href="#!/{{userId}}/whatif"><button type="button" class="btn btn-default">See What I Need</button></a>
+				</div>
 	
 	</div>
 
-	<div id="profile-buttons" class="col-sm-12 col-lg-12">
-		<button type="button" class="btn btn-default" ng-click="openNewCourseModal()">Create New Course</button><br><br>
-		<a ng-href="#!/{{userId}}/whatif"><button type="button" class="btn btn-default">See What I Need</button></a>
-	</div>
 
 	<div ng-include="'partials/MODAL_newCourse.html'"></div>
 
