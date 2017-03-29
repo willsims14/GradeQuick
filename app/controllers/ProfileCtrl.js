@@ -35,7 +35,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
             $scope.semester.selectedSemester = $scope.semesters[0];
 
 
-            // $scope.getTotalCumulativeGPA();
+            $scope.getTotalCumulativeGPA();
 
     	});
     });
