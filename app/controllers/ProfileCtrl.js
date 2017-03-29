@@ -6,6 +6,8 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 	var myParams = $routeParams;
     $scope.userId = myParams.userId;
 
+
+
     // New Course Placeholder
     $scope.course = {};
     $scope.years = ['2013', '2014', '2015', '2016', '2017', '2018'];
@@ -15,10 +17,6 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     $scope.semesters = [];
 
     let DefaultCourseSettings = CourseSettings.DefaultCourseSettings;
-
-    console.log("Default: ", DefaultCourseSettings);
-
-
 
 	// Get user information to display on profile
 	AuthFactory.getUserProfile($scope.userId)
@@ -51,6 +49,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
         $('#newCourseModal').modal('show');
     };
 
+    // Creates a new course
     $scope.createCourse = function(semesterInfo){
         $scope.course.semester = semesterInfo.season + "-" + semesterInfo.year;
         $scope.course.year = semesterInfo.year;
@@ -76,6 +75,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     	$scope.course = {};
     };
 
+    // Deletes a single course
     $scope.courseDelete = function(courseId){
     	console.log("Deleting: ", courseId);
     	GradeStorage.deleteCourse(courseId)
@@ -92,12 +92,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     	});
     };
 
-    $scope.updateGrade = function(){
-        console.log("CLICKED");
-        var newGrade = $scope.updatedGrade;
-    };
-
-
+    // Gets GPA for ALL semesters
     $scope.getTotalCumulativeGPA = function(){
         console.log("Getting GPA: ", $scope.semesters);
 
@@ -116,7 +111,6 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 
         function createObject(semester){
             let vals = Object.values(semester);
-            console.log("Vals: ", semester);
             var GPAholder = [];
 
             // Get GPA for newly created Object
@@ -135,6 +129,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
         }
     };
 
+    // Gets GPA for individual semesters
     $scope.getGPA = function(){
         $scope.semester.filter = $scope.semester.selectedSemester;
         if($scope.semester.selectedSemester === "All Courses"){
@@ -148,36 +143,21 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
                     myCourses.push($scope.courses[i]);
                 }
             }
-            // Calculate GPA (depending on grade style selected by user)
-            if($scope.gradeStyle === "Cumulative Average"){
-                let cumulativeGPA = GradeStorage.getWeightedGPA(myCourses);
-                if(cumulativeGPA <= 0 || cumulativeGPA > 4.05){
-                    $scope.semester.GPA = "N/A";
-                    return;
-                }                
-                $scope.semester.GPA = (cumulativeGPA).toFixed(2);
 
-            }else if($scope.gradeStyle === "Weighted Average"){
-                console.log("MyCourses!!: ", myCourses);
-                let weightedGPA = GradeStorage.getCumulativeGPA(myCourses);
-                if(weightedGPA <= 0 || weightedGPA > 4.05){
-                    $scope.semester.GPA = "N/A";
-                    return;
-                }
-                console.log("WeightedGPA: ", weightedGPA);
-                $scope.semester.GPA = (weightedGPA).toFixed(2);
-            }else{
-                console.log("ERROR");
+            let weightedGPA = GradeStorage.getCumulativeGPA(myCourses);
+            if(weightedGPA <= 0 || weightedGPA > 4.05){
+                $scope.semester.GPA = "N/A";
+                return;
             }
+            $scope.semester.GPA = (weightedGPA).toFixed(2);
         }
-
     };
 
+    // 
     $scope.goToCourseSettings = function(courseId){
         $window.location.href = `#!/settings/${courseId}`;
-        $routeParams.courseName = "x";
-    };
 
+    };
 
 });
 
