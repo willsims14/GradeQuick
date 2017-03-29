@@ -9,12 +9,7 @@
 	margin-top: 7.5%;
 }
 
-/* Splash Page Styling */
-#splash-container{
-	/*margin: 0 5%;*/
-	/*width: 50%;*/
 
-}
 #x{
 	display: flex;
 	flex-direction: row;
@@ -190,19 +185,25 @@
 	margin: 0px;
 	padding: 0px;
 	/*margin-right: 2%;*/
-	margin-top: 5%;
+	margin-top: 7.5%;
 	padding-bottom: auto;
 }
+
+#add-course-btn{
+	margin-top: 2.5%;
+}
+
 
 #selector-container h3{
 	padding: 0px;
 	margin: 0px;
 	text-decoration: underline;
+	/*margin: 2.5%;*/
+	width: auto;
 }
 #course-header{
-	margin: 10px 5%;
+/*	margin: 10px 2.5%;*/
 	text-align: left;
-
 	color: #020202;
 }
 
