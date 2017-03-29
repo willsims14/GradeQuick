@@ -12,6 +12,9 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 	$scope.header = "";
 	$scope.btnText = ""; 
 	$scope.emailAlreadyUsed = false;
+	$scope.profileActive = true;
+
+
 
 	var user = AuthFactory.getUser();
 

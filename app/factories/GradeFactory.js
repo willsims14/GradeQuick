@@ -51,7 +51,6 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 			$http.get(`${FBCreds.databaseURL}/courses.json?orderBy="semester"&equalTo="${semester}"`)
 			.then((coursesObj) => {
 
-				console.log("CourseObj: ", coursesObj);
 				coursesCollection = coursesObj.data;
 				resolve(coursesCollection);
 			})
@@ -346,7 +345,6 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 	    	
 	        let courseSettings = myCourses[i].gradeRange;
 
-	        console.log("myCourses[i]: ", myCourses[i]);
 
 	        if(myCourses[i].finalWeighted >= courseSettings.A.min){
 	            weightedGPA += 4.0;
@@ -360,9 +358,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 	            weightedGPA += 0.0;
 	        }
 	    }
-	    console.log("Total: ", weightedGPA);
-	    console.log("Length: ", myCourses.length);
-	    console.log("Equals: ", weightedGPA / myCourses.length);
+
 	    return 1.0 * (weightedGPA / myCourses.length);
     }
 
