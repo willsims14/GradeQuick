@@ -64,7 +64,7 @@
 	list-style: none;
 	padding: none;
 	margin: none;
-	line-height: 2.5em;
+	/*line-height: em;*/
 	text-align: left;
 }
 #course-list li a{
@@ -78,6 +78,11 @@
 #main-container{
 
 	text-align: center;
+}
+
+.course-name{
+	margin: 0;
+	padding: 0;
 }
 
 #single-course-view-container{
@@ -138,10 +143,19 @@
 #course-list-container{
 	border: 2px solid black;
 	padding: 0 1%;
-	margin-left: -2%;
+
 	background-color: #89898A;
-	margin-right: 2%;
+	/*margin-right: 2%;*/
 	padding-bottom: 1%;
+}
+
+.course-desc{
+	margin-left: 0px;
+}
+
+.course-row{
+	margin-bottom: 1%;
+	margin-top: 10px;
 }
 
 #delete-course-btns{
@@ -175,7 +189,7 @@
 	text-align: center;
 	margin: 0px;
 	padding: 0px;
-	margin-right: 2%;
+	/*margin-right: 2%;*/
 	margin-top: 5%;
 	padding-bottom: auto;
 }
