@@ -42,13 +42,9 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 			setTimeout( function(){
 				GradeStorage.getUserCourses()
 				.then( function(userCourses){
-					console.log("UserCourses: ", userCourses);
-					console.log("UserProfile: ", $scope.userProfile);
-
 					AuthFactory.getUserProfile($scope.user)
 					.then( function(profile){
 						let myCurrentSemester = Object.values(profile)[0].currentSemester;
-						console.log("MyProfile: ", myCurrentSemester);
 						let myNavCourses = [];
 						
 						for(var i = 0; i < userCourses.length; i++){
@@ -56,8 +52,6 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 								myNavCourses.push(userCourses[i]);
 							}
 						}
-						console.log("MyNavCourses: ", myNavCourses);
-						console.log("All Courses: ", userCourses);
 						$scope.navCourses = myNavCourses;
 
 					});

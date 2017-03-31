@@ -1,25 +1,34 @@
 <div>
-	<div id="profile-header">
-		<h1><strong>Profile</strong></h1>
-		<h3>{{account.name}}</h3>
+	<div id="profile-header" class="row">
+		<h1><strong>{{account.name}}</strong></h1>
+		<div ng-if="hasProfilePicture">
+			<img id="user-profile-pic" src="{{profilePicturePath}}" alt="IMAGE">
+		</div>
 
+		<div id="profile-buttons" class="col-sm-12 col-lg-12">
+			<div>
+				<a ng-href="#!/{{userId}}/whatif"><button type="button" class="btn btn-default">See What I Need</button></a>
+			</div>
+			<div>
+				<a><button type="button" class="btn btn-default" ng-click="openChangeSemesterModal()">Change Current Semester</button></a>
+			</div>
+		</div>
 	</div>
-
-	<hr>
 
 	<div id="main-container" class="row">
 		<div class="row">
-			<div id="selector-container" class="col-sm-4 col-md-4 col-lg-4">
-				<div>
-					<h3 id="show-gpa-header"><strong>GPA: {{semester.GPA}}</strong></h3>
-					<strong>Filter By Semester:</strong> <br><select ng-model="semester.selectedSemester" ng-options="x for x in semesters" ng-change="getGPA(semester)" ng-init="semester.selectedSemester = semesters[0]">
+
+			<div id="selector-container" class="col-sm-12 col-md-12 col-lg-12">
+				<div id="filter-div">
+					<h3 id="show-gpa-header"><strong>GPA: {{semester.GPA}}</strong></h3><br>
+					Filter By Semester<br><select ng-model="semester.selectedSemester" ng-options="x for x in semesters" ng-change="getGPA(semester)" ng-init="semester.selectedSemester = semesters[0]">
 					</select><br>
 
 				</div>
 			</div>
 			<br>
-
-			<div class="col-sm-7 col-md-7 col-lg-4 bg-info clearfix" id="course-list-container">
+			<div class="col-sm-3"></div>
+			<div class="col-sm-6 col-md-6 col-lg-6 bg-info clearfix" id="course-list-container">
 				<div class="row">
 					<h3 id="course-header" class="col-sm-10">{{semester.selectedSemester}}</h3>
 					<div id="add-course-btn" class="col-sm-1"><span class="btn btn-default glyphicon glyphicon-pencil" aria-hidden="true" ng-click="openNewCourseModal()"></span></div>
@@ -28,7 +37,7 @@
 				<ul ng-repeat="course in courses | filter: semester.filter" id="course-list">
 					<li class=" course-row row">
 						<a class="course-name col-sm-6" href="#!/courses/{{course.id}}" ng-click="x(course.id)"><span class="real-course-name">{{course.name}}</span><br><i class="course-desc col-sm-12"><small><span class="real-course-desc">{{course.desc}}</span></small></i></a>
-						<div class="col-sm-3 course-grade"><strong>{{course.finalWeighted.toFixed(0)}}%</strong></div>
+						<div class="col-sm-3 course-grade"><strong>{{Math.round((course.finalWeighted))}}%</strong></div>
 						<div class="col-sm-3" id="delete-course-btns">
 							<a class="btn btn-default" ng-click="goToCourseSettings(course.id)"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
 							<button class="btn btn-sm btn-danger delete-course-btn" ng-click="courseDelete(course.id)">
@@ -38,12 +47,9 @@
 					</li>
 				</ul>
 			</div >	
-			<div class="col-sm-4"></div>
+			<div class="col-sm-3"></div>
 		</div>
-				<div id="profile-buttons" class="col-sm-12 col-lg-12"><br>
-					<a ng-href="#!/{{userId}}/whatif"><button type="button" class="btn btn-default">See What I Need</button></a><br>
-					<a><button type="button" class="btn btn-default" ng-click="openChangeSemesterModal()">Change Current Semester</button></a>
-				</div>
+
 	
 	</div>
 

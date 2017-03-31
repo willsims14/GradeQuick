@@ -2,8 +2,12 @@
 
 
 app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactory, GradeStorage, CourseSettings){
-	// Get userId from URL 
-	var myParams = $routeParams;
+    $scope.profilePicturePath = "/img/profile_placeholder.png";
+
+    $scope.Math = window.Math;
+
+    // Get userId from URL 
+    var myParams = $routeParams;
     $scope.userId = myParams.userId;
 
 
@@ -14,6 +18,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     $scope.seasons = ['Fall', 'Winter', 'Spring', 'Summer'];
     $scope.styles = ["Weighted Average", "Cumulative Average"];
     $scope.semesters = [];
+    $scope.hasProfilePicture = false;
 
     let DefaultCourseSettings = CourseSettings.DefaultCourseSettings;
 
@@ -22,7 +27,12 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 	.then( function(userProfile){
         let userDetails = Object.values(userProfile)[0];
         $scope.currentSemester = userDetails.currentSemester;
-        console.log("CURRENT SEMESTER: ", $scope.currentSemester);
+        console.log("CPROFILE: ", userProfile);
+        if(userDetails.profilePicture){
+            console.log("TRUE");
+            $scope.profilePicturePath = userDetails.profilePicture;
+            $scope.hasProfilePicture = true;
+        }
 		// Set the returned user profile equal to $scope.account
 		$scope.account = Object.values(userProfile)[0];
     	GradeStorage.getUserCourses()
@@ -207,6 +217,8 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
             });
         });
     };
+
+
 });
 
 

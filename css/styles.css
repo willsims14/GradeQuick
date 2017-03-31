@@ -6,7 +6,9 @@
 
 #profile-buttons{
 	text-align: center;
-	margin-top: 7.5%;
+	margin: 1% 0;
+	line-height: 3em;
+
 }
 
 
@@ -68,6 +70,8 @@
 }
 #profile-header{
 	text-align: center;
+	background-color: #89898A;
+	border-bottom: 2px solid black;
 }
 
 #main-container{
@@ -83,6 +87,9 @@
 	color: #020202;
 }
 
+.navbar{
+	margin-bottom: 0;
+}
 /*.course-name{
 	text-decoration: underline;
 }*/
@@ -189,7 +196,7 @@
 	margin: 0px;
 	padding: 0px;
 	/*margin-right: 2%;*/
-	margin-top: 7.5%;
+	margin-top: 1%;
 	padding-bottom: auto;
 }
 
@@ -303,6 +310,21 @@
 .course-grade{
 	margin-top: 10px;
 }
+
+#user-profile-pic{
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+}
+
+#filter-div{
+	margin: 1% 0;
+}
+
+
 
 a{
 	color: #020202;

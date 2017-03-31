@@ -128,12 +128,15 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
     	console.log("Clicked Assignment: ", $scope.updatedGrade);
 
     	if(!$scope.updatedGrade){
+    		console.log("NO GRADE");
     		$scope.invalidGrade = true;
     		return;
     	}else if(parseFloat($scope.updatedGrade) < 0){
+    		console.log("INVALID NUMBER");
     		$scope.invalidGrade = true;
     		return;
     	}else{
+    		console.log("GOOD");
 	    	$scope.invalidGrade = false;
 	    	$scope.enteringGrade = false;
 	    	GradeStorage.getCourseObject(selectedCourse)
@@ -141,44 +144,40 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 	    		let myCourse = courseObj.info;
 	    		let courseAssignments = Object.values(courseObj.assignments);
 
-	    		// let accumulatedCourseGrade = GradeStorage.calcCumulativeAvg(courseAssignments);
+	    		console.log("Assignments: ", courseAssignments);
+
 	    		let weightedCourseGrade = GradeStorage.calcWeightedAvg(courseAssignments);
 
-	    		// myCourse.finalAccumulated = accumulatedCourseGrade;
 	    		myCourse.finalWeighted = weightedCourseGrade;
 
-	    		// Update Course to reflect newly calculated final grade values
-	    		GradeStorage.updateCourseGrades(myCourse, selectedCourse)
-	    		.then( (msg) => {
+		        var updatedAssignment = $scope.assignmentToUpdate;
+		        updatedAssignment.pointsEarned = $scope.updatedGrade;
+		        updatedAssignment.weightedGradePercentage = (updatedAssignment.pointsEarned / updatedAssignment.possiblePoints) * 100;
 
-
-			        var updatedAssignment = $scope.assignmentToUpdate;
-			        updatedAssignment.pointsEarned = $scope.updatedGrade;
-			        updatedAssignment.weightedGradePercentage = (updatedAssignment.pointsEarned / updatedAssignment.possiblePoints) * 100;
-					
-
-					console.log("UpdatedAssignment: ", updatedAssignment);
-
-			        if(updatedAssignment.pointsEarned > updatedAssignment.possiblePoints){
-						console.log("CANT EARN MORE POINTS THAN POSSIBLE");
-						$("#new-grade-btn").html(" ");
-						return;
-			        }
-
-			        GradeStorage.recordNewGrade(updatedAssignment.id, updatedAssignment)
-			        .then( function(){
-			        	GradeStorage.getCourseAssignments(selectedCourse)
-						.then( function(assignments){
+		        GradeStorage.recordNewGrade(updatedAssignment.id, updatedAssignment)
+		        .then( function(){
+		        	GradeStorage.getCourseAssignments(selectedCourse)
+					.then( function(assignments){
+			    		weightedCourseGrade = GradeStorage.calcWeightedAvg(assignments);
+			    		console.log("WeightedCourse: ", weightedCourseGrade);
+						myCourse.finalWeighted = weightedCourseGrade;
+						GradeStorage.updateCourseGrades(myCourse, selectedCourse)
+    					.then( (msg) => {
+					        if(updatedAssignment.pointsEarned > updatedAssignment.possiblePoints){
+								$("#new-grade-btn").html(" ");
+								return;
+					        }
 							$("#new-grade-btn").val(" ");
 							$scope.assignments = assignments;
 							$scope.recalculate();
 					    	$scope.enteringGrade = false;
-					    	$scope.clickedAssignment = "";
+							$scope.clickedAssignment.id = "";
+					    	$scope.clickedAssignment = {};
 					    	$scope.updatedGrade = undefined;
-						});
-			        });
-	    		});
-	    	});
+				    	});
+					});
+		        });
+    		});
     	}
     };
     
