@@ -14,13 +14,15 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     $scope.seasons = ['Fall', 'Winter', 'Spring', 'Summer'];
     $scope.styles = ["Weighted Average", "Cumulative Average"];
     $scope.semesters = [];
-    $scope.semesters = [];
 
     let DefaultCourseSettings = CourseSettings.DefaultCourseSettings;
 
 	// Get user information to display on profile
 	AuthFactory.getUserProfile($scope.userId)
 	.then( function(userProfile){
+        let userDetails = Object.values(userProfile)[0];
+        $scope.currentSemester = userDetails.currentSemester;
+        console.log("CURRENT SEMESTER: ", $scope.currentSemester);
 		// Set the returned user profile equal to $scope.account
 		$scope.account = Object.values(userProfile)[0];
     	GradeStorage.getUserCourses()
@@ -29,8 +31,17 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
             console.log("Courses: ", courses);
             var localSemesters = GradeStorage.getUserSemesters(courses);
             localSemesters.unshift("All Courses");
+
             $scope.semesters = localSemesters;
-            $scope.semester.selectedSemester = $scope.semesters[0];
+
+            for(var i = 0; i < $scope.semesters.length; i++){
+                if($scope.semesters[i] === $scope.currentSemester){
+                    $scope.semester.selectedSemester = $scope.semesters[i];
+                    $scope.semester.filter = $scope.semester.selectedSemester;
+                }
+            }
+
+            // $scope.semester.selectedSemester = $scope.semesters[0];
 
 
             $scope.getTotalCumulativeGPA();
@@ -159,6 +170,45 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 
     };
 
+        // Open modal for a new assignment
+    $scope.openChangeSemesterModal = function(){
+        // Gets a shallow copy so that we dont mess with $scope.semesters by reference
+        $scope.currentSemesterChoices = Object.values(jQuery.extend({}, $scope.semesters));
+        $scope.currentSemesterChoices.splice(0,1);
+
+        // Forces first input of modal to get focus
+        $('.modal').on('shown.bs.modal', function() {
+            $(this).find('[autofocus]').focus();
+        });
+        // Show login modal window
+        $('#changeSemesterModal').modal('show');
+    };
+
+    // Gets old user profile, updates current semester, and patches new object to Firebase
+    $scope.updateCurrentSemester = function(selectedSemester){
+
+        AuthFactory.getUserProfile($scope.userId)
+        .then( function(userProfile){
+            let profileKey = Object.keys(userProfile)[0];
+            let updatedUserProfile = jQuery.extend({}, Object.values(userProfile)[0]);
+            updatedUserProfile.currentSemester = selectedSemester;
+            AuthFactory.updateUserProfile(profileKey, updatedUserProfile)
+            .then( function (resolve){
+                
+                for(var i = 0; i < $scope.semesters.length; i++){
+                    console.log("HERE: ", i);
+                    if($scope.semesters[i] === selectedSemester){
+                        console.log("$scope.semesters: ", $scope.semesters[i]);
+                        $scope.semester.selectedSemester = $scope.semesters[i];
+                        $scope.semester.filter = $scope.semester.selectedSemester;
+                    }
+                }                
+
+            });
+        });
+    };
 });
+
+
 
 // END

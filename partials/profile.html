@@ -42,14 +42,16 @@
 			<div class="col-sm-4"></div>
 		</div>
 				<div id="profile-buttons" class="col-sm-12 col-lg-12"><br>
-					<a ng-href="#!/{{userId}}/whatif"><button type="button" class="btn btn-default">See What I Need</button></a>
+					<a ng-href="#!/{{userId}}/whatif"><button type="button" class="btn btn-default">See What I Need</button></a><br>
+					<a><button type="button" class="btn btn-default" ng-click="openChangeSemesterModal()">Change Current Semester</button></a>
 				</div>
 	
 	</div>
 
 
 	<div ng-include="'partials/MODAL_newCourse.html'"></div>
-
+	<div ng-include="'partials/MODAL_changeSemester.html'"></div>
+	<!-- NG-INCLUDE NEW MODAL FOR CHANGING CURRENT SEMESTER -->
 
 
 

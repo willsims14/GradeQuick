@@ -98,8 +98,24 @@ app.factory("AuthFactory", function(FBCreds, $q, $http){
 		});
 	};
 
+	let updateUserProfile = function(key, profile){
+		return $q(function(resolve, reject){
+			$http.patch(`${FBCreds.databaseURL}/users/${key}.json`, 
+				angular.toJson(profile))
+			.then( function(ObjectFromFirebase){
+				console.log("Resolved: ", ObjectFromFirebase);
+				resolve(ObjectFromFirebase);
+			})
+			.catch( function(error){
+				reject(error);
+			});
+		});
 
 
-	return {createUserProfile, checkUserHasProfile, getUserProfile, createUser, loginUser, logoutUser, isAuthenticated, getUser, authWithProvider};
+	};
+
+
+
+	return {updateUserProfile, createUserProfile, checkUserHasProfile, getUserProfile, createUser, loginUser, logoutUser, isAuthenticated, getUser, authWithProvider};
 
 });

@@ -2,6 +2,10 @@
 
 app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, GradeStorage, $routeParams){
 
+	$(document).ready(function(){
+		console.log("HERE");
+	    $('[data-toggle="tooltip"]').tooltip();   
+	});
 	// Scope Variables
 	$scope.enteringGrade = false;
 	// $scope.newGrade;
@@ -15,6 +19,7 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 	// Local Variables
 	var selectedCourse = $routeParams.courseId;
 	var user = AuthFactory.getUser();
+
 
 
 	GradeStorage.getCourseName(selectedCourse)
@@ -136,10 +141,10 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 	    		let myCourse = courseObj.info;
 	    		let courseAssignments = Object.values(courseObj.assignments);
 
-	    		let accumulatedCourseGrade = GradeStorage.calcCumulativeAvg(courseAssignments);
+	    		// let accumulatedCourseGrade = GradeStorage.calcCumulativeAvg(courseAssignments);
 	    		let weightedCourseGrade = GradeStorage.calcWeightedAvg(courseAssignments);
 
-	    		myCourse.finalAccumulated = accumulatedCourseGrade;
+	    		// myCourse.finalAccumulated = accumulatedCourseGrade;
 	    		myCourse.finalWeighted = weightedCourseGrade;
 
 	    		// Update Course to reflect newly calculated final grade values
@@ -188,23 +193,12 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 		if($scope.assignments.length === 0){
 			$scope.finalGrade = "No Grades Yet!";
 		}else{
-			if($scope.selectedGradeStyle === "Cumulative Average"){
-				finalGrade = GradeStorage.calcCumulativeAvg($scope.assignments);
-				$scope.finalGrade = finalGrade.toFixed(2) + "%";
+			finalGrade = GradeStorage.calcWeightedAvg($scope.assignments);
+			$scope.finalGrade = finalGrade.toFixed(2) + "%";
 
-				bar = ChartFactory.getBar(finalGrade);
-				bar.setText($scope.finalGrade);
-				bar.animate(finalGrade / 100);
-			}else if($scope.selectedGradeStyle === "Weighted Average"){
-				finalGrade = GradeStorage.calcWeightedAvg($scope.assignments);
-				$scope.finalGrade = finalGrade.toFixed(2) + "%";
-
-				bar = ChartFactory.getBar(finalGrade);
-				bar.setText($scope.finalGrade);
-				bar.animate(finalGrade / 100);
-			}else{
-				console.log("ELSE OCCURRED");
-			}
+			bar = ChartFactory.getBar(finalGrade);
+			bar.setText($scope.finalGrade);
+			bar.animate(finalGrade / 100);
 		}
     };
 

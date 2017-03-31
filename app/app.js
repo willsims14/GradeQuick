@@ -38,6 +38,10 @@ app.config(function($routeProvider){
         controller: 'WhatDoINeedCtrl',
         resolve:{isAuth}
     }).
+    // when('/:userId/settings', {
+    //     templateUrl: '',
+    //     controller: ''
+    // }).
     otherwise('/');
 });
 
