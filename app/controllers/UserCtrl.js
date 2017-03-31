@@ -1,6 +1,6 @@
 "use strict";
 
-app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, GradeStorage){
+app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, AuthFactory, GradeStorage){
 	// Scope Variables
 	$scope.isLoggedIn = false;
 	$scope.account = {
@@ -14,9 +14,16 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 	$scope.emailAlreadyUsed = false;
 	$scope.profileActive = true;
 
+	let myParams = $routeParams;
+	$scope.userID = myParams.userId;
+
+
 
 
 	var user = AuthFactory.getUser();
+
+
+
 
 	// When user logs in/out, change isLoggedIn value
 	firebase.auth().onAuthStateChanged( function(user){
@@ -35,7 +42,27 @@ app.controller("UserCtrl",  function($scope, $location, $window, AuthFactory, Gr
 			setTimeout( function(){
 				GradeStorage.getUserCourses()
 				.then( function(userCourses){
-					$scope.navCourses = userCourses;
+					console.log("UserCourses: ", userCourses);
+					console.log("UserProfile: ", $scope.userProfile);
+
+					AuthFactory.getUserProfile($scope.user)
+					.then( function(profile){
+						let myCurrentSemester = Object.values(profile)[0].currentSemester;
+						console.log("MyProfile: ", myCurrentSemester);
+						let myNavCourses = [];
+						
+						for(var i = 0; i < userCourses.length; i++){
+							if(userCourses[i].semester === myCurrentSemester){
+								myNavCourses.push(userCourses[i]);
+							}
+						}
+						console.log("MyNavCourses: ", myNavCourses);
+						console.log("All Courses: ", userCourses);
+						$scope.navCourses = myNavCourses;
+
+					});
+
+
 				});
 			}, 1000);
 		}
