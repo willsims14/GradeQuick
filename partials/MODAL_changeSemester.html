@@ -7,9 +7,9 @@
           </div>
           <div class="modal-body" >
             <section class="form-group">
-              <h4>Change Current Semester</h4>
+              <!-- <h4>Change Current Semester</h4> -->
               <div>
-                Current Semester: <span>Fall '17</span>
+               New Current Semester: <span></span><br>
                 <select ng-model="newCurrentSemester" ng-options="x for x in currentSemesterChoices">
                   
                 </select>
@@ -17,8 +17,8 @@
             </section>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-primary"  data-dismiss="modal" ng-click="updateCurrentSemester(newCurrentSemester)">Change Semester</button>
             <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary"  data-dismiss="modal" ng-click="updateCurrentSemester(newCurrentSemester)">Change Semester</button>
           </div>
       </div>
     </div>

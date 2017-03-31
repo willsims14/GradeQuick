@@ -27,7 +27,7 @@
 				<hr>
 				<ul ng-repeat="course in courses | filter: semester.filter" id="course-list">
 					<li class=" course-row row">
-						<a class="course-name col-sm-9" href="#!/courses/{{course.id}}" ng-click="x(course.id)">{{course.name}}<br><i class="course-desc col-sm-12"><small>{{course.desc}}</small></i></a>
+						<a class="course-name col-sm-9" href="#!/courses/{{course.id}}" ng-click="x(course.id)"><span class="real-course-name">{{course.name}}</span><br><i class="course-desc col-sm-12"><small><span class="real-course-desc">{{course.desc}}</span></small></i></a>
 						<div class="col-sm-3" id="delete-course-btns">
 							<a class="btn btn-default" ng-click="goToCourseSettings(course.id)">
 								<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>

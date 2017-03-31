@@ -82,9 +82,7 @@
 	text-decoration-color: black;
 	color: #020202;
 }
-a{
-	color: #020202;
-}
+
 /*.course-name{
 	text-decoration: underline;
 }*/
@@ -264,4 +262,42 @@ a{
 
 #resetRangesBtn{
 
+}
+
+#changeSemesterModal{
+	text-align: center;
+	line-height: 1.5em;
+}
+
+
+
+.real-course-name{
+	color: black;
+}
+
+.real-course-desc{
+	color: #232323;
+}
+
+#navbar-courses{
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	background-color: #333;
+}
+
+#navbar-courses li a{
+	/*border: 0.5px solid black;*/
+	color: #9d9d9d;
+}
+
+.dropdown-menu{
+	margin: 0;
+	padding: 0;
+	border: 2px solid black;
+}
+
+
+a{
+	color: #020202;
 }

@@ -16,7 +16,7 @@
           <li class="dropdown" uib-dropdown>
             <a  class="btn dropdown-toggle"  uib-dropdown-toggle>My Classes <b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <div  ng-repeat="course in navCourses" >
+                <div id="navbar-courses"  ng-repeat="course in navCourses" >
                     <li><a ng-href="#!/courses/{{course.id}}">{{course.name}}</a></li>
                 </div>
             </ul>
