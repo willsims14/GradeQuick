@@ -78,7 +78,16 @@
 .course-name{
 	margin: 0;
 	padding: 0;
+	text-decoration: none;
+	text-decoration-color: black;
+	color: #020202;
 }
+a{
+	color: #020202;
+}
+/*.course-name{
+	text-decoration: underline;
+}*/
 
 #single-course-view-container{
 	border: 2px solid black;
@@ -110,9 +119,6 @@
 	margin: 0px;
 }
 
-.course-name{
-	text-decoration: underline;
-}
 
 #update-grade-container{
 

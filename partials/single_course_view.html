@@ -13,7 +13,9 @@
 			<div ng-class="{red: wasAssignmentClicked(ass)}" id="single-assignment-list-item">
 				<li ng-class="enteringGrade ? 'disabled' : 'enabled'" >
 					<div class="col-sm-8 col-lg-9">
-						<span class="col-sm-8 course-name">{{ass.name}}</span>
+						<span class="col-sm-8 course-name">
+							<a href="#" data-toggle="tooltip" data-placement="top" title="balls" html="true" animation="true">{{ass.name}}</a>
+						</span>
 						<span class="col-sm-4 course-grade"><strong>{{ass.pointsEarned}}/{{ass.possiblePoints}}</strong></span>
 					</div>
 					<div class="col-sm-4 col-lg-3 single-course-delete-btns">
@@ -50,7 +52,6 @@
 		</div>
 		<div id="single-course-btns">
 			<h2 >Final Grade: {{finalGrade}} </h2>
-			<select ng-init="selectedGradeStyle = styles[0]" ng-model="selectedGradeStyle" ng-options="style for style in styles" ng-change="recalculate()"></select>
 			<br>
 			<button class="btn btn-primary" ng-click="openNewAssignmentModal()">New Assignment</button>
 		</div>
