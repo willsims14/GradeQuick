@@ -1,4 +1,5 @@
-<h1>{{course.name}} Settings</h1>
+<div id="settings-page">
+	<h1>{{course.name}} Settings</h1>
 
 
 
@@ -6,72 +7,72 @@
 
 
 
-<h3>Current Grade Ranges</h3>
+	<h3>Current Grade Ranges</h3>
 
-<div id="show-grade-range">
-	<div><label>A: </label><span>{{myRange.A.min}} - {{myRange.A.max}}</span></div>
-	<div><label>B: </label><span>{{myRange.B.min}} - {{myRange.B.max}}</span></div>
-	<div><label>C: </label><span>{{myRange.C.min}} - {{myRange.C.max}}</span></div>
-	<div><label>D: </label><span>{{myRange.D.min}} - {{myRange.D.max}}</span></div>
-	<div><label>F: </label><span>{{myRange.F.min}} - {{myRange.F.max}}</span></div>
-	<button class="btn btn-primary" ng-click="showEditRanges = true">Edit</button>
-</div>
-
-
-<hr>
-
-<div ng-show="showEditRanges">
-	<h3>Change Grade Ranges</h3>
-
-
-
-	<div>
-		<select placeholder="Change Range Style">
-			<option>Standard</option>
-			<option>Plusses</option>
-			<option>Plusses and Minuses</option>
-		</select>
+	<div id="show-grade-range">
+		<div><label>A: </label><span>{{myRange.A.min}} - {{myRange.A.max}}</span></div>
+		<div><label>B: </label><span>{{myRange.B.min}} - {{myRange.B.max}}</span></div>
+		<div><label>C: </label><span>{{myRange.C.min}} - {{myRange.C.max}}</span></div>
+		<div><label>D: </label><span>{{myRange.D.min}} - {{myRange.D.max}}</span></div>
+		<div><label>F: </label><span>{{myRange.F.min}} - {{myRange.F.max}}</span></div>
+		<button class="btn btn-primary" ng-click="showEditRanges = true">Edit</button>
 	</div>
 
-	<br>
+
+	<hr>
+
+	<div ng-show="showEditRanges">
+		<h3>Change Grade Ranges</h3>
 
 
-	<!-- A -->
-	<label>A: </label>
-	<input type="number" ng-model="range.A.min" placeholder="{{myRange.A.min}}"> 
-	- 
-	<input type="number" ng-model="range.A.max" placeholder="{{myRange.A.max}}"> <br>
 
-	<!-- B -->
-	<label>B: </label>
-	<input type="number" ng-model="range.B.min" placeholder="{{myRange.B.min}}">
-	 - 
-	<input type="number" ng-model="range.B.max" placeholder="{{myRange.B.max}}"><br>
+		<div>
+			<select placeholder="Change Range Style">
+				<option>Standard</option>
+				<option>Plusses</option>
+				<option>Plusses and Minuses</option>
+			</select>
+		</div>
 
-	<!-- C -->
-	<label>C: </label>
-	<input type="number" ng-model="range.C.min" placeholder="{{myRange.C.min}}">
-	 - 
-	 <input type="number" ng-model="range.C.max" placeholder="{{myRange.C.max}}"><br>
+		<br>
 
-	 <!-- D -->
-	<label>D: </label>
-	<input type="number" ng-model="range.D.min" placeholder="{{myRange.D.min}}">
-	 - 
-	 <input type="number" ng-model="range.D.max" placeholder="{{myRange.D.max}}"><br>
 
-	 <!-- E -->
-	<label>F: </label>
-	<input type="number" ng-model="range.F.min" placeholder="{{myRange.F.min}}" >
-	 - 
-	 <input type="number" ng-model="range.F.max" placeholder="{{myRange.F.max}}">
-	 <br>
+		<!-- A -->
+		<label>A: </label>
+		<input type="number" ng-model="range.A.min" placeholder="{{myRange.A.min}}"> 
+		- 
+		<input type="number" ng-model="range.A.max" placeholder="{{myRange.A.max}}"> <br>
 
-	 <button class="btn btn-primary" ng-click="updateCourseGradeRange()">Submit</button>
-	 <button class="btn btn-default"  ng-click="clearFields()">Clear</button>
+		<!-- B -->
+		<label>B: </label>
+		<input type="number" ng-model="range.B.min" placeholder="{{myRange.B.min}}">
+		 - 
+		<input type="number" ng-model="range.B.max" placeholder="{{myRange.B.max}}"><br>
 
-	 <div><br></div>
-	<div><button class="btn btn-danger" ng-click="resetRanges()" id="resetRangesBtn">Reset Ranges</button><br>
+		<!-- C -->
+		<label>C: </label>
+		<input type="number" ng-model="range.C.min" placeholder="{{myRange.C.min}}">
+		 - 
+		 <input type="number" ng-model="range.C.max" placeholder="{{myRange.C.max}}"><br>
+
+		 <!-- D -->
+		<label>D: </label>
+		<input type="number" ng-model="range.D.min" placeholder="{{myRange.D.min}}">
+		 - 
+		 <input type="number" ng-model="range.D.max" placeholder="{{myRange.D.max}}"><br>
+
+		 <!-- E -->
+		<label>F: </label>
+		<input type="number" ng-model="range.F.min" placeholder="{{myRange.F.min}}" >
+		 - 
+		 <input type="number" ng-model="range.F.max" placeholder="{{myRange.F.max}}">
+		 <br>
+
+		 <button class="btn btn-primary" ng-click="updateCourseGradeRange()">Submit</button>
+		 <button class="btn btn-default"  ng-click="clearFields()">Clear</button>
+
+		 <div><br></div>
+		<div><button class="btn btn-danger" ng-click="resetRanges()" id="resetRangesBtn">Reset Ranges</button><br>
+		</div>
 	</div>
-
 </div>

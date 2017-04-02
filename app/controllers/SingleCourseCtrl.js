@@ -117,6 +117,7 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 
 	// Shows input field for entering a new grade
 	$scope.showNewGradeField = function(assignment){
+		setTimeout(function() {$("#new-grade-field").focus();}, 100);
         $scope.assignmentToUpdate = assignment;
 		$scope.enteringGrade = true;
 		$scope.clickedAssignment = assignment;
