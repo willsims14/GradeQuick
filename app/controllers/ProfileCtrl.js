@@ -106,7 +106,8 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 
     // Deletes a single course
     $scope.courseDelete = function(courseId){
-    	console.log("Deleting: ", courseId);
+        $('[data-toggle="confirmation"]').confirmation();
+        $('#element').confirmation('show');
     	GradeStorage.deleteCourse(courseId)
     	.then( function(){
     		GradeStorage.getUserCourses()
