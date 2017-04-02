@@ -5,6 +5,12 @@
 			<img id="user-profile-pic" src="{{profilePicturePath}}" alt="IMAGE">
 		</div>
 
+		<div id="profile-info-container">
+			 <h4>Current Semester: {{currentSemester}}</h4>
+			 <h4>{{userSchool}}</h4>
+			 <h5>{{userEmail}}</h5>
+		</div>
+
 		<div id="profile-buttons" class="col-sm-12 col-lg-12">
 			<div>
 				<a ng-href="#!/{{userId}}/whatif"><button type="button" class="btn btn-default">See What I Need</button></a>
@@ -40,9 +46,12 @@
 						<div class="col-sm-3 course-grade"><strong>{{Math.round((course.finalWeighted))}}%</strong></div>
 						<div class="col-sm-3" id="delete-course-btns">
 							<a class="btn btn-default" ng-click="goToCourseSettings(course.id)"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+
 							<button class="btn btn-sm btn-danger delete-course-btn" ng-click="courseDelete(course.id)">
 								<span class="glyphicon glyphicon-trash"></span>
 							</button>
+	
+
 						</div>
 					</li>
 				</ul>
@@ -56,6 +65,7 @@
 
 	<div ng-include="'partials/MODAL_newCourse.html'"></div>
 	<div ng-include="'partials/MODAL_changeSemester.html'"></div>
+
 	<!-- NG-INCLUDE NEW MODAL FOR CHANGING CURRENT SEMESTER -->
 
 
