@@ -25,39 +25,47 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 	// Get user information to display on profile
 	AuthFactory.getUserProfile($scope.userId)
 	.then( function(userProfile){
-        let userDetails = Object.values(userProfile)[0];
-        $scope.currentSemester = userDetails.currentSemester;
-        console.log("CPROFILE: ", userProfile);
-        if(userDetails.profilePicture){
-            console.log("TRUE");
-            $scope.profilePicturePath = userDetails.profilePicture;
-            $scope.hasProfilePicture = true;
-        }
-		// Set the returned user profile equal to $scope.account
-		$scope.account = Object.values(userProfile)[0];
-    	GradeStorage.getUserCourses()
-    	.then( function(courses){
-            $scope.courses = courses;
-            console.log("Courses: ", courses);
-            var localSemesters = GradeStorage.getUserSemesters(courses);
-            localSemesters.unshift("All Courses");
 
-            $scope.semesters = localSemesters;
+        if(Object.keys(userProfile).length > 0){
 
-            for(var i = 0; i < $scope.semesters.length; i++){
-                if($scope.semesters[i] === $scope.currentSemester){
-                    $scope.semester.selectedSemester = $scope.semesters[i];
-                    $scope.semester.filter = $scope.semester.selectedSemester;
-                }
+            let userDetails = Object.values(userProfile)[0];
+
+            $scope.currentSemester = userDetails.currentSemester;
+            $scope.userEmail = userDetails.email;
+            if(userDetails.profilePicture){
+                $scope.profilePicturePath = userDetails.profilePicture;
+                $scope.hasProfilePicture = true;
             }
+            if(userDetails.school){
+                $scope.userSchool = userDetails.school;
+            }
+    		// Set the returned user profile equal to $scope.account
+    		$scope.account = Object.values(userProfile)[0];
+        	GradeStorage.getUserCourses()
+        	.then( function(courses){
+                $scope.courses = courses;
+                console.log("Courses: ", courses);
+                var localSemesters = GradeStorage.getUserSemesters(courses);
+                localSemesters.unshift("All Courses");
 
-            // $scope.semester.selectedSemester = $scope.semesters[0];
+                $scope.semesters = localSemesters;
+
+                for(var i = 0; i < $scope.semesters.length; i++){
+                    if($scope.semesters[i] === $scope.currentSemester){
+                        $scope.currentSemester = $scope.semesters[i];
+                        $scope.semester.selectedSemester = $scope.semesters[i];
+                        $scope.semester.filter = $scope.semester.selectedSemester;
+                    }
+                }
+
+                // $scope.semester.selectedSemester = $scope.semesters[0];
 
 
-            $scope.getTotalCumulativeGPA();
-
-    	});
+                $scope.getTotalCumulativeGPA();
+            });
+        }
     });
+
 
 	// Opens modal for user to login
     $scope.openNewCourseModal = function(){

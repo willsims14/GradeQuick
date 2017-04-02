@@ -37,7 +37,8 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 		});
 	});
 
-	$scope.$on('$routeChangeStart', function(next, current) { 
+	$scope.$on('$routeChangeStart', function(next, current) {
+		console.log("USER: ", $scope.user);
 		if($scope.user){
 			setTimeout( function(){
 				GradeStorage.getUserCourses()
@@ -90,6 +91,17 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
         $('#registerModal').modal('show');
     };
 
+    $scope.openGoogleRegisterModal = function(){
+    	// Forces first input of modal to get focus
+    	$('.modal').on('shown.bs.modal', function() {
+  			$(this).find('[autofocus]').focus();
+		});
+		// Show login modal window
+        $('#googleRegisterModal').modal('show');
+    };
+
+    
+
     // // Allows user to hit enter to submit login modal
     // $(".login-input").keypress( function(event){
     // 	if(event.keyCode === 13){
@@ -121,6 +133,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 			AuthFactory.checkUserHasProfile(validatedUser.user.uid)
 			.then( function(userExists){
 				if(userExists === false){
+					// $scope.openGoogleRegisterModal();
 					var newUser = {
 						name: validatedUser.user.displayName,
 						email: validatedUser.user.email,
@@ -151,6 +164,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 	      password: $scope.account.password,
 	      name: $scope.account.name,
 	      school: $scope.account.school,
+	      currentSemester: "Fall-2017",
 	      userId: null
 	    };
 
