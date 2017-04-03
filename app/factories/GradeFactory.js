@@ -62,7 +62,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 
 
 
-	let getCourseName = (courseId) => {
+	let getCourse = (courseId) => {
 		let courseName = "";
 		let user = AuthFactory.getUser();
 
@@ -71,7 +71,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 		return $q((resolve, reject) => {
 			$http.get(`${FBCreds.databaseURL}/courses/${courseId}.json`)
 			.then((coursesObj) => {
-				let courseName = coursesObj.data.name;
+				let courseName = coursesObj.data;
 				resolve(courseName);
 			})
 			.catch((error) => {
@@ -334,6 +334,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
     function getCumulativeGPA(myCourses){
 	    let weightedGPA = 0.0;
 	    let i = 0;
+	    let lengthToSubtract = 0;
 
 
 	    if(myCourses.length === 0){
@@ -345,6 +346,11 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 	    	
 	        let courseSettings = myCourses[i].gradeRange;
 
+	        // Keeps track of courses without grades so they aren't taken into account
+	        // 	for GPA calculation
+	        if(!angular.isNumber(myCourses[i].finalWeighted)){
+	        	lengthToSubtract++;
+	        }
 
 	        if(myCourses[i].finalWeighted >= courseSettings.A.min){
 	            weightedGPA += 4.0;
@@ -359,7 +365,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 	        }
 	    }
 
-	    return 1.0 * (weightedGPA / myCourses.length);
+	    return 1.0 * (weightedGPA / (myCourses.length - lengthToSubtract));
     }
 
 
@@ -367,5 +373,5 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 
 
 
-	return {getCoursesBySemester, getUserSemesters, getCumulativeGPA, getWeightedGPA, updateCourseGrades, getCourseObject, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourseName, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
+	return {getCoursesBySemester, getUserSemesters, getCumulativeGPA, getWeightedGPA, updateCourseGrades, getCourseObject, getCoursePossiblePoints, getCourseEarnedPoints, getUngradedAssignmentsForCourse, deleteCourse, getUserCourses, addUserCourse, getCourse, getCourseAssignments, addNewAssignment, deleteAssignment, recordNewGrade, calcWeightedAvg, calcCumulativeAvg};
 });

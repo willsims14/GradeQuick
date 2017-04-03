@@ -2,12 +2,10 @@
 
 app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, GradeStorage, $routeParams){
 
-	$(document).ready(function(){
-		console.log("HERE");
-	    $('[data-toggle="tooltip"]').tooltip();   
-	});
+
 	// Scope Variables
 	$scope.enteringGrade = false;
+	$scope.noGrades = false;
 	// $scope.newGrade;
 	$scope.newAssignment = {};
 	// For dropown under header
@@ -22,9 +20,10 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 
 
 
-	GradeStorage.getCourseName(selectedCourse)
-	.then( function(tempCourseName){
-		$scope.courseName = tempCourseName;
+	GradeStorage.getCourse(selectedCourse)
+	.then( function(tempCourse){
+		$scope.course = tempCourse;
+		// $scope
 	});
 
 	GradeStorage.getCourseAssignments(selectedCourse)
@@ -71,17 +70,19 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 
 		if($scope.newAssignment.pointsEarned){
 			console.log("Assignments: ", $scope.assignments);
-
-
 		}else{
 			$scope.newAssignment.pointsEarned = "*";
 		}
 
+		$scope.noGrades = false;
 		GradeStorage.addNewAssignment($scope.newAssignment)
 		.then( function(){
 			GradeStorage.getCourseAssignments(selectedCourse)
 			.then( function(assignments){
 				$scope.assignments = assignments;
+				for(var i = 0; i < $scope.assignments.length; i++){
+					console.log("Assignemnts[i]: ", assignments[i].finalWeighted);
+				}
 				GradeStorage.getCourseObject(selectedCourse)
 				.then( function(courseObj){
 		    		let myCourse = courseObj.info;
@@ -186,13 +187,22 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
     $scope.recalculate = function(){
 		var finalGrade = 0.0;
 		var bar;
+		var noGradedAssignmentsFlag = false;
 
 		// Clear the chart's div to prepare for new chart
 		$("#chartDiv").html("");
 
-		if($scope.assignments.length === 0){
+		for(var i = 0; i < $scope.assignments.length; i++){
+			if(angular.isNumber($scope.assignments[i].pointsEarned)){
+				noGradedAssignmentsFlag = true;
+			}
+		}
+
+		if($scope.assignments.length === 0 || noGradedAssignmentsFlag === true){
 			$scope.finalGrade = "No Grades Yet!";
+			$scope.noGrades = true;
 		}else{
+			$scope.noGrades = false;
 			finalGrade = GradeStorage.calcWeightedAvg($scope.assignments);
 			$scope.finalGrade = finalGrade.toFixed(2) + "%";
 

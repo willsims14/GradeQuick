@@ -11,6 +11,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     $scope.userId = myParams.userId;
 
 
+    $scope.isNumber = angular.isNumber;
 
     // New Course Placeholder
     $scope.course = {};
@@ -22,9 +23,9 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 
     let DefaultCourseSettings = CourseSettings.DefaultCourseSettings;
 
-	// Get user information to display on profile
-	AuthFactory.getUserProfile($scope.userId)
-	.then( function(userProfile){
+    // Get user information to display on profile
+    AuthFactory.getUserProfile($scope.userId)
+    .then( function(userProfile){
 
         if(Object.keys(userProfile).length > 0){
 
@@ -39,10 +40,10 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
             if(userDetails.school){
                 $scope.userSchool = userDetails.school;
             }
-    		// Set the returned user profile equal to $scope.account
-    		$scope.account = Object.values(userProfile)[0];
-        	GradeStorage.getUserCourses()
-        	.then( function(courses){
+            // Set the returned user profile equal to $scope.account
+            $scope.account = Object.values(userProfile)[0];
+            GradeStorage.getUserCourses()
+            .then( function(courses){
                 $scope.courses = courses;
                 console.log("Courses: ", courses);
                 var localSemesters = GradeStorage.getUserSemesters(courses);
@@ -67,6 +68,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     });
 
 
+
 	// Opens modal for user to login
     $scope.openNewCourseModal = function(){
     	console.log("OPEN MODAL");
@@ -85,6 +87,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
         $scope.course.season = semesterInfo.season;
     	$scope.course.userId = AuthFactory.getUser();
         $scope.course.gradeRange = DefaultCourseSettings;
+        $scope.course.finalWeighted = '*';
 
 
 
@@ -106,8 +109,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 
     // Deletes a single course
     $scope.courseDelete = function(courseId){
-        $('[data-toggle="confirmation"]').confirmation();
-        $('#element').confirmation('show');
+
     	GradeStorage.deleteCourse(courseId)
     	.then( function(){
     		GradeStorage.getUserCourses()
@@ -124,7 +126,6 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 
     // Gets GPA for ALL semesters
     $scope.getTotalCumulativeGPA = function(){
-        console.log("Getting GPA: ", $scope.semesters);
 
         var mySemesters = {};
         let length = $scope.semesters.length - 1;
@@ -146,6 +147,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
             // Get GPA for newly created Object
             if(GradeStorage.getCumulativeGPA(vals)){
                 let grade = GradeStorage.getCumulativeGPA(vals);
+                console.log("Grade: ", grade);
                 GPAholder.push(grade);
 
                 
@@ -175,11 +177,11 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
             }
 
             let weightedGPA = GradeStorage.getCumulativeGPA(myCourses);
-            if(weightedGPA <= 0 || weightedGPA > 4.05){
-                $scope.semester.GPA = "N/A";
-                return;
+            if(weightedGPA <= 0 || weightedGPA > 4.05 || Number.isNaN(weightedGPA)){
+                $scope.semester.GPA = "None";
+            }else{
+                $scope.semester.GPA = (weightedGPA).toFixed(2);
             }
-            $scope.semester.GPA = (weightedGPA).toFixed(2);
         }
     };
 

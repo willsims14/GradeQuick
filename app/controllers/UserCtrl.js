@@ -146,7 +146,6 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 			    		$window.location.href = `#!/${newUser.userId}`;
 					});
 				}else{
-					console.log("Welcome Back ", validatedUser.user.displayName);
 		    		$window.location.href = `#!/${validatedUser.user.uid}`;
 				}
 			});
