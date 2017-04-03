@@ -18,6 +18,7 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 	var selectedCourse = $routeParams.courseId;
 	var user = AuthFactory.getUser();
 
+	$scope.isNumber = angular.isNumber;
 
 
 	GradeStorage.getCourse(selectedCourse)
@@ -187,21 +188,25 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
     $scope.recalculate = function(){
 		var finalGrade = 0.0;
 		var bar;
-		var noGradedAssignmentsFlag = false;
+		var noGradedAssignmentsFlag = true;
 
 		// Clear the chart's div to prepare for new chart
 		$("#chartDiv").html("");
 
 		for(var i = 0; i < $scope.assignments.length; i++){
-			if(angular.isNumber($scope.assignments[i].pointsEarned)){
-				noGradedAssignmentsFlag = true;
+			console.log("I: ", $scope.assignments[i].pointsEarned);
+			if($scope.assignments[i].pointsEarned !== '*'){
+				console.log("TRUE");
+				noGradedAssignmentsFlag = false;
 			}
 		}
 
 		if($scope.assignments.length === 0 || noGradedAssignmentsFlag === true){
+			console.log("LENGTH 0 or NO GRADED ASSIGNMENTS");
 			$scope.finalGrade = "No Grades Yet!";
 			$scope.noGrades = true;
 		}else{
+			console.log("ELSE");
 			$scope.noGrades = false;
 			finalGrade = GradeStorage.calcWeightedAvg($scope.assignments);
 			$scope.finalGrade = finalGrade.toFixed(2) + "%";

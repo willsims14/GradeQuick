@@ -348,20 +348,20 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 
 	        // Keeps track of courses without grades so they aren't taken into account
 	        // 	for GPA calculation
-	        if(!angular.isNumber(myCourses[i].finalWeighted)){
+	        if(!angular.isNumber(myCourses[i].finalWeighted) || myCourses[i].finalWeighted === '*'){
 	        	lengthToSubtract++;
-	        }
-
-	        if(myCourses[i].finalWeighted >= courseSettings.A.min){
-	            weightedGPA += 4.0;
-	        }else if(myCourses[i].finalWeighted >= courseSettings.B.min){
-	            weightedGPA += 3.0;
-	        }else if(myCourses[i].finalWeighted >= courseSettings.C.min){
-	            weightedGPA += 2.0;
-	        }else if(myCourses[i].finalWeighted >= courseSettings.D.min){
-	            weightedGPA += 1.0;
 	        }else{
-	            weightedGPA += 0.0;
+		        if(myCourses[i].finalWeighted >= courseSettings.A.min){
+		            weightedGPA += 4.0;
+		        }else if(myCourses[i].finalWeighted >= courseSettings.B.min){
+		            weightedGPA += 3.0;
+		        }else if(myCourses[i].finalWeighted >= courseSettings.C.min){
+		            weightedGPA += 2.0;
+		        }else if(myCourses[i].finalWeighted >= courseSettings.D.min){
+		            weightedGPA += 1.0;
+		        }else{
+		            weightedGPA += 0.0;
+		        }
 	        }
 	    }
 
