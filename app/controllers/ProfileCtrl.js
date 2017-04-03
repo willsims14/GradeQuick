@@ -59,10 +59,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
                     }
                 }
 
-                // $scope.semester.selectedSemester = $scope.semesters[0];
-
-
-                $scope.getTotalCumulativeGPA();
+                $scope.getGPA();
             });
         }
     });
@@ -155,6 +152,8 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
                     GPA += GPAholder[j];
                 }
 
+                console.log("Length: ", length);
+
                 let newGPA = (GPA /length);
                 $scope.semester.GPA = newGPA.toFixed(2);
             }
@@ -176,7 +175,9 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
                 }
             }
 
+            console.log("MyCOurses: ", myCourses);
             let weightedGPA = GradeStorage.getCumulativeGPA(myCourses);
+            console.log("WeightedGPA: ", weightedGPA);
             if(weightedGPA <= 0 || weightedGPA > 4.05 || Number.isNaN(weightedGPA)){
                 $scope.semester.GPA = "None";
             }else{
