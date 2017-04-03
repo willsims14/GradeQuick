@@ -27,7 +27,7 @@
 			<div id="selector-container" class="col-sm-12 col-md-12 col-lg-12">
 				<div id="filter-div">
 					<h3 id="show-gpa-header"><strong>GPA: {{semester.GPA}}</strong></h3>
-					Filter By Semester<br><select ng-model="semester.selectedSemester" ng-options="x for x in semesters" ng-change="getGPA(semester)" ng-init="semester.selectedSemester = semesters[0]">
+					Your Semesters <select ng-model="semester.selectedSemester" ng-options="x for x in semesters" ng-change="getGPA(semester)" ng-init="semester.selectedSemester = semesters[0]">
 					</select><br>
 
 				</div>

@@ -30,6 +30,11 @@
 	background-color: #fff;
 }
 
+#grid-headers{
+	text-align: left;
+	margin-left: 10px;
+}
+
 .myBody{
 	background-color: #24292e;
 }
@@ -40,10 +45,17 @@
 	/*padding: 1% 0%;*/
 }
 
+#see-what-i-need-btns{
+	margin-top: 10px;
+}
+
 .disabled{
 	color: #696969;
 }
 
+#i-need-warning{
+	margin: 10px 0;
+}
 .enabled{
 	color: black;
 }

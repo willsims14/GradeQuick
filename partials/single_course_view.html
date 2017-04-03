@@ -24,7 +24,7 @@
 						</span>
 						<span class="col-sm-5 course-grade">
 							<strong>{{ass.pointsEarned}}/{{ass.possiblePoints}}</strong>
-							<small><i> ({{(ass.pointsEarned/ass.possiblePoints * 100).toFixed(0)}}%)</i></small>
+							<small ng-show="graded(ass.pointsEarned)"><i> ({{(ass.pointsEarned/ass.possiblePoints * 100).toFixed(0)}}%)</i></small>
 						</span>
 					</div>
 					<div class="col-sm-2 col-lg-2 single-course-delete-btns">

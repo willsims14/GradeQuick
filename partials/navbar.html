@@ -1,7 +1,7 @@
 <nav class="navbar navbar-inverse" ng-controller="UserCtrl">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" ng-href="#!/{{user}}">Quick Grade</a>
+      <a class="navbar-brand" ng-href="#!/{{user}}">MyGrades</a>
 
         <button type="button" class="navbar-toggle btn btn-primary dropdown-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
         </button>
@@ -27,7 +27,7 @@
     		<!-- ng-model for text -->
       <li><a ng-href="#" ng-show="!isLoggedIn" ng-click="openRegisterModal()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
       <li><a ng-href="#" ng-show="!isLoggedIn" ng-click="openLoginModal()"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      <li><a ng-href="#!/{{user}}/settings" ng-show="isLoggedIn"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+<!--       <li><a ng-href="#!/{{user}}/settings" ng-show="isLoggedIn"><span class="glyphicon glyphicon-cog"></span> Settings</a></li> -->
       <li><a ng-href="#" ng-show="isLoggedIn" ng-click="logout()"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
     </ul>
   </div>

@@ -10,6 +10,9 @@
               <h4>Create your course</h4>
               <div>
                 Course Name: <input class="form-control" type="text" autofocus="true"  ng-model="course.name" ng-focus="true">
+                <div class="alert alert-warning" role="alert" ng-show="badInput">
+                  <strong>Warning!</strong> Better check yourself, you're not looking too good.
+                </div>
                 Course Description: <input class="form-control" type="text" ng-model="course.desc"><br>
                 Semester Taken: 
                 <select ng-model="semester.season" ng-options="x for x in seasons" ng-init="semester.season = seasons[0]"></select>

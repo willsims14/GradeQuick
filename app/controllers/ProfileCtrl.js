@@ -13,6 +13,8 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 
     $scope.isNumber = angular.isNumber;
 
+    $scope.badInput = false;
+
     // New Course Placeholder
     $scope.course = {};
     $scope.years = ['2013', '2014', '2015', '2016', '2017', '2018'];
