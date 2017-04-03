@@ -9,17 +9,17 @@
             <div>Course: <select ng-model="selectedCourseINeed" ng-options="course.name for course in courses" ng-change="getCourseDetails()"><br></select></div>
 
 
-            <div class="alert alert-danger" ng-show="noUngradedAssignments">
-            <strong>Danger!</strong> No ungraded assignments for this course!
+            <div id="i-need-warning" class="col-sm-12" ng-show="noUngradedAssignments">
+                <div class="alert alert-danger col-sm-6"><strong>Danger!</strong> No ungraded assignments for this course!</div>
+                <div class="col-sm-6"></div>
             </div>
-
             <div ng-show="courseChosen">Assignment: <select ng-init="selectedAssignmentINeed = ungradedAssignments[0]" ng-model="selectedAssignmentINeed" ng-options="ass.name for ass in ungradedAssignments" ng-change="assignmentChosen = true">
             </select></div>
 
             <div ng-show="assignmentChosen">Desired Grade in Course: <input type="number" ng-model="desiredGrade"></div>
         </section>
     </div>
-    <div>
+    <div id="see-what-i-need-btns">
         <button class="btn btn-primary"   ng-click="seeWhatINeed()">See What I Need</button>
         <button class="btn btn-secondary" ng-click="clearFields()">Cancel</button>
     </div>

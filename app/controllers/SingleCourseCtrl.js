@@ -14,11 +14,15 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 	$scope.clickedAssignment = {};
 	$scope.clickedAssignment.id = "";
 	$scope.invalidGrade = false;
+	$scope.badInputName = false;
+	$scope.badInputPoints = false;
 	// Local Variables
 	var selectedCourse = $routeParams.courseId;
 	var user = AuthFactory.getUser();
 
 	$scope.isNumber = angular.isNumber;
+
+
 
 
 	GradeStorage.getCourse(selectedCourse)
@@ -33,8 +37,6 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 		$scope.assignments = assignments;
 		$scope.recalculate();
 	});
-
-
 
 
 	$scope.wasAssignmentClicked = function(assignment){
@@ -65,44 +67,49 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 
 		if($scope.newAssignment.pointsEarned > $scope.newAssignment.possiblePoints){
 			console.log("CANT EARN MORE POINTS THAN POSSIBLE");
-			// ALERT USER HERE
-			return;
-		}
-
-		if($scope.newAssignment.pointsEarned){
-			console.log("Assignments: ", $scope.assignments);
+			$scope.badInputPoints = true;
+		}else if(!$scope.newAssignment.possiblePoints || !$scope.newAssignment.name){
+			console.log("NO POSSIBLE POINTS");
+			$scope.badInputName = true;
 		}else{
-			$scope.newAssignment.pointsEarned = "*";
+			$scope.badInputName = false;
+			$scope.badInputPoints = false;
+			$('#newAssignmentModal').modal('hide');
+			if($scope.newAssignment.pointsEarned){
+				console.log("Assignments: ", $scope.assignments);
+			}else{
+				$scope.newAssignment.pointsEarned = "*";
+			}
+
+			$scope.noGrades = false;
+			GradeStorage.addNewAssignment($scope.newAssignment)
+			.then( function(){
+				GradeStorage.getCourseAssignments(selectedCourse)
+				.then( function(assignments){
+					$scope.assignments = assignments;
+					for(var i = 0; i < $scope.assignments.length; i++){
+						console.log("Assignemnts[i]: ", assignments[i].finalWeighted);
+					}
+					GradeStorage.getCourseObject(selectedCourse)
+					.then( function(courseObj){
+			    		let myCourse = courseObj.info;
+
+						let accumulatedCourseGrade = GradeStorage.calcCumulativeAvg($scope.assignments);
+			    		let weightedCourseGrade = GradeStorage.calcWeightedAvg($scope.assignments);
+
+			    		myCourse.finalAccumulated = accumulatedCourseGrade;
+			    		myCourse.finalWeighted = weightedCourseGrade;
+
+			    		GradeStorage.updateCourseGrades(myCourse, selectedCourse)
+			    		.then( function(msg){
+							$scope.recalculate();
+			    		});
+					});
+				});			
+			}).catch( function(error){
+				console.log("ERROR: ", error);
+			});	
 		}
-
-		$scope.noGrades = false;
-		GradeStorage.addNewAssignment($scope.newAssignment)
-		.then( function(){
-			GradeStorage.getCourseAssignments(selectedCourse)
-			.then( function(assignments){
-				$scope.assignments = assignments;
-				for(var i = 0; i < $scope.assignments.length; i++){
-					console.log("Assignemnts[i]: ", assignments[i].finalWeighted);
-				}
-				GradeStorage.getCourseObject(selectedCourse)
-				.then( function(courseObj){
-		    		let myCourse = courseObj.info;
-
-					let accumulatedCourseGrade = GradeStorage.calcCumulativeAvg($scope.assignments);
-		    		let weightedCourseGrade = GradeStorage.calcWeightedAvg($scope.assignments);
-
-		    		myCourse.finalAccumulated = accumulatedCourseGrade;
-		    		myCourse.finalWeighted = weightedCourseGrade;
-
-		    		GradeStorage.updateCourseGrades(myCourse, selectedCourse)
-		    		.then( function(msg){
-						$scope.recalculate();
-		    		});
-				});
-			});			
-		}).catch( function(error){
-			console.log("ERROR: ", error);
-		});
 		$scope.newAssignment = {};
 	};
 
@@ -196,17 +203,14 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 		for(var i = 0; i < $scope.assignments.length; i++){
 			console.log("I: ", $scope.assignments[i].pointsEarned);
 			if($scope.assignments[i].pointsEarned !== '*'){
-				console.log("TRUE");
 				noGradedAssignmentsFlag = false;
 			}
 		}
 
 		if($scope.assignments.length === 0 || noGradedAssignmentsFlag === true){
-			console.log("LENGTH 0 or NO GRADED ASSIGNMENTS");
 			$scope.finalGrade = "No Grades Yet!";
 			$scope.noGrades = true;
 		}else{
-			console.log("ELSE");
 			$scope.noGrades = false;
 			finalGrade = GradeStorage.calcWeightedAvg($scope.assignments);
 			$scope.finalGrade = finalGrade.toFixed(2) + "%";
@@ -224,6 +228,13 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
     	$scope.invalidGrade = false;
     };
 
+    $scope.graded = function(num){
+    	if(num === "*"){
+    		return false;
+    	}else{
+    		return true;
+    	}
+    };
 
 });
 
