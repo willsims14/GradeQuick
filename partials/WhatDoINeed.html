@@ -4,14 +4,15 @@
             <h2>What Do I Need</h2>
             <hr>
             <h4>Choose a class</h4>
-            <h4>{{finalGradeShow}}</h4>
+            <h3>{{finalGradeShow}}</h3>
 
             <div>Course: <select ng-model="selectedCourseINeed" ng-options="course.name for course in courses" ng-change="getCourseDetails()"><br></select></div>
 
 
             <div id="i-need-warning" class="col-sm-12" ng-show="noUngradedAssignments">
-                <div class="alert alert-danger col-sm-6"><strong>Danger!</strong> No ungraded assignments for this course!</div>
-                <div class="col-sm-6"></div>
+                <div class="col-sm-3"></div>
+                <div class="alert alert-danger col-sm-6"><strong>Wait!</strong> No ungraded assignments for this course!</div>
+                <div class="col-sm-3"></div>
             </div>
             <div ng-show="courseChosen">Assignment: <select ng-init="selectedAssignmentINeed = ungradedAssignments[0]" ng-model="selectedAssignmentINeed" ng-options="ass.name for ass in ungradedAssignments" ng-change="assignmentChosen = true">
             </select></div>

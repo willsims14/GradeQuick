@@ -48,15 +48,12 @@ app.controller("WhatDoINeedCtrl", function($scope, AuthFactory, GradeStorage){
             }
 
             // Set final grade that depends on grade style chosen
-            if($scope.selectedGradeStyle === "Cumulative Avg"){
-                $scope.finalGradeShow = (GradeStorage.calcCumulativeAvg(allAssignments.all)).toFixed(1) + "%";
-                $scope.finalGrade = GradeStorage.calcCumulativeAvg(allAssignments.all);
-            }else if($scope.selectedGradeStyle === "Weighted Avg"){
+                    
                 $scope.finalGradeShow = GradeStorage.calcWeightedAvg(allAssignments.all).toFixed(1) + "%";
                 $scope.finalGrade = GradeStorage.calcWeightedAvg(allAssignments.all);
-            }else{
 
-            }
+                console.log("Final Grade", $scope.finalGrade);
+
         });
     };
 

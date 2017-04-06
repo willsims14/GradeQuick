@@ -267,8 +267,9 @@
 }
 
 #grade-needed-container{
-	margin-left: 5%;
-	line-height: 2em;
+
+	line-height: 1.5em;
+	text-align: center;
 }
 
 #chartDiv{
@@ -329,7 +330,9 @@
 }
 
 .course-grade{
-	margin-top: 0px;
+	margin-top: 10px;
+	font-size: 1.25em;
+
 }
 
 #user-profile-pic{
