@@ -12,9 +12,9 @@ You need a few things in order to download and run MyGrades:
     "use strict";
 
     app.constant('FBCreds', {
-        apiKey: "AIzaSyCw9ZpEYg8YvdpaxHmK8QevO9j2GQdCPVc",
-        authDomain: "mygrader.firebaseapp.com",
-        databaseURL: "https://mygrader.firebaseio.com"
+        apiKey:      "XXXXXXXXXXXXXXX",
+        authDomain:  "XXXXXXXXXXXXXXX",
+        databaseURL: "XXXXXXXXXXXXXXX"
     }); 
     ```
 2. Node Package Manager (NPM) was used to install and manage dependencies
