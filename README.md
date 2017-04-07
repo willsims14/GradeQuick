@@ -19,5 +19,5 @@ You need a few things in order to download and run MyGrades:
     ```
 * Node Package Manager (NPM) was used to download and manage dependencies
     * How to Download Dependencies
-        -```cd lib```
+        -```cd lib
           npm install```
