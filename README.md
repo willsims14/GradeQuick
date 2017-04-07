@@ -1,5 +1,5 @@
 # MyGrades
-## Will Sims
+### Will Sims
 #### March, 2017
 
 ### What It Does
@@ -17,7 +17,7 @@ You need a few things in order to download and run MyGrades:
         databaseURL: "https://mygrader.firebaseio.com"
     }); 
     ```
-* Node Package Manager (NPM) was used to download and manage dependencies
-    * How to Download Dependencies
-        -```cd lib
-          npm install```
+* Node Package Manager (NPM) was used to install and manage dependencies
+    * ```cd lib```
+    * ```npm install```
+* If you're using Bower, be sure to change the <script> tags in index.html to reflect the correct filepaths.
