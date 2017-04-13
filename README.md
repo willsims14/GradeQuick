@@ -21,7 +21,7 @@ You need a few things in order to download and run MyGrades:
 2. Node Package Manager (NPM) was used to install and manage dependencies
     * ```cd lib```
     * ```npm install```
-    * _If you're using Bower, be sure to change the <script> tags in index.html to reflect the correct filepaths._
+* _If you're using Bower, be sure to change the <script> tags in index.html to reflect the correct filepaths._
 ### Built With
 * [Angular](https://docs.angularjs.org/api)
 * [Bootstrap](http://getbootstrap.com/)
