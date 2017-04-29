@@ -28,4 +28,4 @@ You need a few things in order to download and run MyGrades:
 ### Contact
 * (willsims14@gmail.com "Email Me")
 * [Connect w/ Me](https://www.linkedin.com/in/willsimsiii/)
-* [Code w/ Me](https://github.com/willsims14)
+* [Code w/ Me](https://github.com/willsims14 "My GitHub")
