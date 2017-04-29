@@ -25,4 +25,7 @@ You need a few things in order to download and run MyGrades:
 * [Angular](https://docs.angularjs.org/api)
 * [Bootstrap](http://getbootstrap.com/)
 
-
+### Contact
+* [Email Me](willsims14@gmail.com)
+* [Connect w/ Me](https://www.linkedin.com/in/willsimsiii/)
+* [Code w/ Me](https://github.com/willsims14)
