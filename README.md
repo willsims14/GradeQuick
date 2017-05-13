@@ -6,7 +6,7 @@ MyGrades is an application for students. MyGrades allows a user to keeps track o
 
 ### Dependencies
 You need a few things in order to download and run MyGrades:
-1. A *Firebase* database to store user grades. Once you have created the Firebaes database and have your keys, create this file (with your own keys): app/values/fb-creds.js
+1. A [*Firebase*](https://firebase.google.com/) database to store user grades. Once you have created the Firebaes database and have your keys, create this file (with your own keys): app/values/fb-creds.js
 
     ```fb-creds.js
     "use strict";
