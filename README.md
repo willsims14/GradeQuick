@@ -26,6 +26,6 @@ You need a few things in order to download and run MyGrades:
 * [Bootstrap](http://getbootstrap.com/)
 
 ### Contact
-* [Email Me](willsims14@gmail.com)
 * [Connect with Me](https://www.linkedin.com/in/willsimsiii/ "My LinkedIn Profile")
 * [Code with Me](https://github.com/willsims14 "My GitHub Profile")
+* Email Me: willsims14@gmail.com
