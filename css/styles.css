@@ -25,9 +25,10 @@
 }
 
 #splash-login-container{
-	border: 2px solid grey;
-	padding: 10px 30px 30px 30px;
+	/*border: 2px solid grey;*/
+	/*padding: 10px 30px 30px 30px;*/
 	background-color: #fff;
+	margin-top: 5%;
 }
 
 #grid-headers{
@@ -330,7 +331,7 @@
 }
 
 .course-grade{
-	margin-top: 10px;
+	margin-top: 5px;
 	font-size: 1.25em;
 
 }
@@ -356,4 +357,33 @@ a{
 
 #settings-page{
 	text-align: center;
+}
+
+#splash-page-header{
+	text-align: center;
+}
+
+#splash-page-header h1, h4 {
+	margin: 0;
+	margin: 1% 0;
+}
+
+#splash-page-newuser{
+	text-align: center;
+	margin: 8% 0;
+
+}
+
+
+
+#new-user{
+	margin-bottom: 3%;
+}
+
+#new-user-sign-up{
+	margin-bottom: 5%;
+}
+
+.assignment-desc{
+	margin:0;
 }
