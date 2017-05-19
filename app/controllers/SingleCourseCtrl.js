@@ -33,7 +33,7 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 
 	GradeStorage.getCourseAssignments(selectedCourse)
 	.then( function(assignments){
-		console.log("SELECTED COURSE: ", selectedCourse);
+		console.log("ASSIGNMENTS: ", assignments);
 		$scope.assignments = assignments;
 		$scope.recalculate();
 	});
@@ -80,6 +80,12 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 			}else{
 				$scope.newAssignment.pointsEarned = "*";
 			}
+
+			if($scope.newAssignment.desc == undefined){
+				console.log("UNDEFINED");
+				$scope.newAssignment.desc == "n/a";
+			}
+			console.log("NewAssingment.desc: ", $scope.newAssignment.desc);
 
 			$scope.noGrades = false;
 			GradeStorage.addNewAssignment($scope.newAssignment)

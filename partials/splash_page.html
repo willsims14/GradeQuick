@@ -1,7 +1,14 @@
+  <div id="splash-page-header">
+    <h1>Welcome to MyGrades</h1>
+
+
+
+  </div>
+
   <div id="x" class="container">
-    <div id="splash-login-container" class="col-sm-6">
+    <div id="splash-login-container" class="col-sm-4">
       <form class="form-signin">
-        <h2 class="form-signin-heading">Please sign in</h2>
+        <h2 class="form-signin-heading"></h2>
                 Email: <input id="login-email-field" class="form-control login-input" type="text" autofocus="true"  ng-model="account.email" ng-focus="true">
                 Password: <input class="form-control login-input" type="password" ng-model="account.password">
         <div class="checkbox">
@@ -10,8 +17,13 @@
           </label>
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="loginUser()">Sign in</button>
-
-        <div id="login-google-btn" class="btn btn-block"><img src="img/google_login.png" width="175" ng-click="loginGoogle()"></div>
       </form>
     </div>
+    <div class="col-sm-2"></div>
+    <div id="splash-page-newuser" class="col-sm-6">
+      <h4 id="new-user">New User? You can sign up here</h4>
+      <button id="new-user-sign-up" class="btn btn-md btn-secondary"><a ng-href="#" ng-show="!isLoggedIn" ng-click="openRegisterModal()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></button>
+      <h4>Or you can sign up using your Google account</h4>
+      <div id="login-google-btn" class="btn btn-block"><img src="img/google_login.png" width="175" ng-click="loginGoogle()"></div>
+  </div>
   </div> <!-- /container -->
