@@ -81,9 +81,9 @@ app.controller("SingleCourseCtrl", function($scope, ChartFactory, AuthFactory, G
 				$scope.newAssignment.pointsEarned = "*";
 			}
 
-			if($scope.newAssignment.desc == undefined){
+			if($scope.newAssignment.desc === undefined){
 				console.log("UNDEFINED");
-				$scope.newAssignment.desc == "n/a";
+				$scope.newAssignment.desc = "n/a";
 			}
 			console.log("NewAssingment.desc: ", $scope.newAssignment.desc);
 
