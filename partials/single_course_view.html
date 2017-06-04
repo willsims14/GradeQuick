@@ -14,7 +14,7 @@
 				</button>
 			</div>
 		</div>
-		<hr>
+		<hr ng-show="!noGrades">
 		<ul ng-repeat="ass in assignments track by ass.id" id="assignment-list">
 			<div ng-class="{red: wasAssignmentClicked(ass)}" id="single-assignment-list-item">
 				<li ng-class="enteringGrade ? 'disabled' : 'enabled'" >
