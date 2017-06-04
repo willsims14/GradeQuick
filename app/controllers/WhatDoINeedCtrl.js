@@ -2,7 +2,6 @@
 
 app.controller("WhatDoINeedCtrl", function($scope, AuthFactory, GradeStorage){
 
-	console.log("What DO I Need");
 
 	    // Ng-Models
     $scope.selectedCourseINeed = null;
@@ -33,7 +32,6 @@ app.controller("WhatDoINeedCtrl", function($scope, AuthFactory, GradeStorage){
     $scope.getCourseDetails = function(){
         GradeStorage.getUngradedAssignmentsForCourse($scope.selectedCourseINeed.id)
         .then( function(allAssignments){
-        	console.log("All: ", allAssignments);
             $scope.ungradedAssignments = allAssignments.ungraded;
             $scope.allAssignments = allAssignments.all;
 
@@ -52,7 +50,6 @@ app.controller("WhatDoINeedCtrl", function($scope, AuthFactory, GradeStorage){
                 $scope.finalGradeShow = GradeStorage.calcWeightedAvg(allAssignments.all).toFixed(1) + "%";
                 $scope.finalGrade = GradeStorage.calcWeightedAvg(allAssignments.all);
 
-                console.log("Final Grade", $scope.finalGrade);
 
         });
     };

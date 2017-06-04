@@ -47,19 +47,26 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
             GradeStorage.getUserCourses()
             .then( function(courses){
                 $scope.courses = courses;
-                console.log("Courses: ", courses);
-                var localSemesters = GradeStorage.getUserSemesters(courses);
-                localSemesters.unshift("All Courses");
 
-                $scope.semesters = localSemesters;
+                if($scope.courses.length == 0){
+                    $scope.noCourses = true;
+                }else{
+                    $scope.noCourses = false;
+                    var localSemesters = GradeStorage.getUserSemesters(courses);
+                    localSemesters.unshift("All Courses");
 
-                for(var i = 0; i < $scope.semesters.length; i++){
-                    if($scope.semesters[i] === $scope.currentSemester){
-                        $scope.currentSemester = $scope.semesters[i];
-                        $scope.semester.selectedSemester = $scope.semesters[i];
-                        $scope.semester.filter = $scope.semester.selectedSemester;
+                    $scope.semesters = localSemesters;
+
+                    for(var i = 0; i < $scope.semesters.length; i++){
+                        if($scope.semesters[i] === $scope.currentSemester){
+                            $scope.currentSemester = $scope.semesters[i];
+                            $scope.semester.selectedSemester = $scope.semesters[i];
+                            $scope.semester.filter = $scope.semester.selectedSemester;
+                        }
                     }
+                    
                 }
+
 
                 $scope.getGPA();
             });
@@ -70,7 +77,6 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 
 	// Opens modal for user to login
     $scope.openNewCourseModal = function(){
-    	console.log("OPEN MODAL");
     	// Forces first input of modal to get focus
     	$('.modal').on('shown.bs.modal', function() {
   			$(this).find('[autofocus]').focus();
@@ -87,11 +93,10 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     	$scope.course.userId = AuthFactory.getUser();
         $scope.course.gradeRange = DefaultCourseSettings;
         $scope.course.finalWeighted = '*';
+        $scope.noCourses = false;
 
 
 
-        console.log("INFO: ", semesterInfo);
-        console.log("$Scope.course:  ", $scope.course);
         
     	GradeStorage.addUserCourse($scope.course)
     	.then( function(){
@@ -113,10 +118,11 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     	.then( function(){
     		GradeStorage.getUserCourses()
     		.then( function(courses){
-                console.log("$Scope.courses");
     			$scope.courses = courses;
+                if($scope.courses.length == 0){
+                    $scope.noCourses = true;
+                }
                 if($scope.semester.selectedSemester !== undefined){
-                    console.log("Selected: ", $scope.semester.selectedSemester);
                     $scope.getGPA();
                 }
     		});
@@ -146,7 +152,6 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
             // Get GPA for newly created Object
             if(GradeStorage.getCumulativeGPA(vals)){
                 let grade = GradeStorage.getCumulativeGPA(vals);
-                console.log("Grade: ", grade);
                 GPAholder.push(grade);
 
                 
@@ -154,7 +159,6 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
                     GPA += GPAholder[j];
                 }
 
-                console.log("Length: ", length);
 
                 let newGPA = (GPA /length);
                 $scope.semester.GPA = newGPA.toFixed(2);
@@ -177,9 +181,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
                 }
             }
 
-            console.log("MyCOurses: ", myCourses);
             let weightedGPA = GradeStorage.getCumulativeGPA(myCourses);
-            console.log("WeightedGPA: ", weightedGPA);
             if(weightedGPA <= 0 || weightedGPA > 4.05 || Number.isNaN(weightedGPA)){
                 $scope.semester.GPA = "None";
             }else{
@@ -220,9 +222,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
             .then( function (resolve){
                 
                 for(var i = 0; i < $scope.semesters.length; i++){
-                    console.log("HERE: ", i);
                     if($scope.semesters[i] === selectedSemester){
-                        console.log("$scope.semesters: ", $scope.semesters[i]);
                         $scope.semester.selectedSemester = $scope.semesters[i];
                         $scope.semester.filter = $scope.semester.selectedSemester;
                     }

@@ -25,16 +25,12 @@ app.controller("SettingsCtrl", function($scope, $routeParams, AuthFactory, Grade
     	let editedCourse = $scope.course;
 
     	if($scope.range === null){
-    		console.log("NULL ERROR");
     	}else if(Object.keys($scope.range).length !== 5){
-    		console.log("AMOUNT ERROR");
     	}else{
     		editedCourse.gradeRange = $scope.range;
-    		console.log("NewCourse: ", editedCourse);
 
 	    	CourseSettings.setCourseSettings($scope.courseId, editedCourse)
 	    	.then( function(msg){
-	    		console.log("Result: ", msg);
 	    	});
     	}
     };
