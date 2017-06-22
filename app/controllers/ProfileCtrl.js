@@ -8,20 +8,17 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
 
     // Get userId from URL 
     var myParams = $routeParams;
-    $scope.userId = myParams.userId;
 
-
-    $scope.isNumber = angular.isNumber;
-
-    $scope.badInput = false;
-
-    // New Course Placeholder
+    // Scope variables
     $scope.course = {};
     $scope.years = ['2013', '2014', '2015', '2016', '2017', '2018'];
     $scope.seasons = ['Fall', 'Winter', 'Spring', 'Summer'];
     $scope.styles = ["Weighted Average", "Cumulative Average"];
     $scope.semesters = [];
+    $scope.userId = myParams.userId;
+    $scope.isNumber = angular.isNumber;
     $scope.hasProfilePicture = false;
+    $scope.badInput = false;
 
     let DefaultCourseSettings = CourseSettings.DefaultCourseSettings;
 
@@ -74,7 +71,6 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     });
 
 
-
 	// Opens modal for user to login
     $scope.openNewCourseModal = function(){
     	// Forces first input of modal to get focus
@@ -96,8 +92,6 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
         $scope.noCourses = false;
 
 
-
-        
     	GradeStorage.addUserCourse($scope.course)
     	.then( function(){
     		GradeStorage.getUserCourses()
@@ -148,6 +142,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
         function createObject(semester){
             let vals = Object.values(semester);
             var GPAholder = [];
+
 
             // Get GPA for newly created Object
             if(GradeStorage.getCumulativeGPA(vals)){
