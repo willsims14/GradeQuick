@@ -38,7 +38,6 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 	});
 
 	$scope.$on('$routeChangeStart', function(next, current) {
-		console.log("USER: ", $scope.user);
 		if($scope.user){
 			setTimeout( function(){
 				GradeStorage.getUserCourses()
@@ -68,7 +67,6 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 		.then(function(data){
 			// $window.location.href = "#!/login";
 		}, function(error){
-			console.log("error occured on logout");
 		});
 	})();
 
@@ -126,7 +124,6 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 		.then(function(validatedUser) {
 			$scope.account.userId = validatedUser.user.uid;
 			$scope.user = validatedUser.user.uid;
-			console.log("CurrentUser: ", $scope.user);
 
 
 			// If user does not have a profile, make one
@@ -150,13 +147,11 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 				}
 			});
 	  	}).catch(function(error) {
-	    	console.log("error with google login", error);
 	  	});
 	};
 	
 
 	$scope.registerNewUser = () => {
-    	console.log("Registering User: ", $scope.account);
   		$scope.emailAlreadyUsed = false;
 		var newUser = {
 	      email: $scope.account.email,
@@ -170,9 +165,7 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 	    // Create register new authenticated user
 	    AuthFactory.createUser(newUser)
 	    .then( (userData) => {
-	      	console.log("UserCtrl newUser:", userData );
 	      	if(userData.code === "auth/email-already-in-use"){
-	      		console.log("------------------------");
 	      		$scope.emailAlreadyUsed = true;
 	      		$scope.$apply();
 	      		return;
@@ -181,17 +174,14 @@ app.controller("UserCtrl",  function($scope, $location, $window, $routeParams, A
 	    		newUser.userId = userData.uid;
 				AuthFactory.createUserProfile(newUser)
 				.then( function(newUser){
-					console.log("NewUserProfile: ", newUser);
 		    		$window.location.href = `#!/${newUser.data.name}`;
 		      		$('#registerModal').modal('hide');
 		      		$scope.loginUser();
 				});
 	  	}
 	    }, (error) => {
-	        console.log("Error creating user:", error);
 	    })
 	    .catch( function(error){
-	    	console.log("Error: ", error);
 	    });
   	};
 

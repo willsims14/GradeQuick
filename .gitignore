@@ -2,6 +2,8 @@ lib/node_modules
 app/values/
 app/values/fb-creds.js
 .DS_Store
+
 node_modules
 npm-debug.log
 *.log
+

@@ -44,19 +44,26 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
             GradeStorage.getUserCourses()
             .then( function(courses){
                 $scope.courses = courses;
-                console.log("Courses: ", courses);
-                var localSemesters = GradeStorage.getUserSemesters(courses);
-                localSemesters.unshift("All Courses");
 
-                $scope.semesters = localSemesters;
+                if($scope.courses.length == 0){
+                    $scope.noCourses = true;
+                }else{
+                    $scope.noCourses = false;
+                    var localSemesters = GradeStorage.getUserSemesters(courses);
+                    localSemesters.unshift("All Courses");
 
-                for(var i = 0; i < $scope.semesters.length; i++){
-                    if($scope.semesters[i] === $scope.currentSemester){
-                        $scope.currentSemester = $scope.semesters[i];
-                        $scope.semester.selectedSemester = $scope.semesters[i];
-                        $scope.semester.filter = $scope.semester.selectedSemester;
+                    $scope.semesters = localSemesters;
+
+                    for(var i = 0; i < $scope.semesters.length; i++){
+                        if($scope.semesters[i] === $scope.currentSemester){
+                            $scope.currentSemester = $scope.semesters[i];
+                            $scope.semester.selectedSemester = $scope.semesters[i];
+                            $scope.semester.filter = $scope.semester.selectedSemester;
+                        }
                     }
+                    
                 }
+
 
                 $scope.getGPA();
             });
@@ -82,6 +89,8 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     	$scope.course.userId = AuthFactory.getUser();
         $scope.course.gradeRange = DefaultCourseSettings;
         $scope.course.finalWeighted = '*';
+        $scope.noCourses = false;
+
 
     	GradeStorage.addUserCourse($scope.course)
     	.then( function(){
@@ -104,6 +113,9 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
     		GradeStorage.getUserCourses()
     		.then( function(courses){
     			$scope.courses = courses;
+                if($scope.courses.length == 0){
+                    $scope.noCourses = true;
+                }
                 if($scope.semester.selectedSemester !== undefined){
                     $scope.getGPA();
                 }
@@ -205,9 +217,7 @@ app.controller("ProfileCtrl", function($scope, $routeParams, $window, AuthFactor
             .then( function (resolve){
                 
                 for(var i = 0; i < $scope.semesters.length; i++){
-                    console.log("HERE: ", i);
                     if($scope.semesters[i] === selectedSemester){
-                        console.log("$scope.semesters: ", $scope.semesters[i]);
                         $scope.semester.selectedSemester = $scope.semesters[i];
                         $scope.semester.filter = $scope.semester.selectedSemester;
                     }

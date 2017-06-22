@@ -36,10 +36,19 @@
 			<div class="col-sm-3"></div>
 			<div class="col-sm-6 col-md-6 col-lg-6 bg-info clearfix" id="course-list-container">
 				<div class="row">
-					<h3 id="course-header" class="col-sm-10">{{semester.selectedSemester}}</h3>
+					<h3 ng-show="!noCourses" id="course-header" class="col-sm-10">{{semester.selectedSemester}}</h3>
+					<span id="no-courses-container" ng-show="noCourses">
+						<span class="col-sm-5"></span>
+						<h3 class="col-sm-3">Add a Course!</h3><span id="new-user-arrow" class="glyphicon glyphicon-arrow-right col-sm-2" aria-hidden="true"></span>
+					</span>
+
 					<div id="add-course-btn" class="col-sm-1"><span class="btn btn-default glyphicon glyphicon-pencil" aria-hidden="true" ng-click="openNewCourseModal()"></span></div>
 				</div>
-				<hr>
+
+
+				<hr ng-show="!noCourses">
+
+
 				<ul ng-repeat="course in courses | filter: semester.filter" id="course-list">
 					<li class=" course-row row"  ng-show="isNumber(course.finalWeighted)">
 						<a class="course-name col-sm-6" href="#!/courses/{{course.id}}" ng-click="x(course.id)"><span class="real-course-name">{{course.name}}</span><br>
