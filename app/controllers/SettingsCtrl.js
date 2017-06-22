@@ -1,6 +1,6 @@
 "use strict";
 
-app.controller("SettingsCtrl", function($scope, $routeParams, AuthFactory, GradeStorage, CourseSettings){
+app.controller("SettingsCtrl", function($scope, $routeParams, $location, AuthFactory, GradeStorage, CourseSettings){
 
 	var myParams = $routeParams;
     $scope.courseId = myParams.courseId;
@@ -34,7 +34,9 @@ app.controller("SettingsCtrl", function($scope, $routeParams, AuthFactory, Grade
 
 	    	CourseSettings.setCourseSettings($scope.courseId, editedCourse)
 	    	.then( function(msg){
-	    		console.log("Result: ", msg);
+	    		var user = AuthFactory.getUser();
+                console.log("User", user);
+                $location.path(`/${user}`)
 	    	});
     	}
     };

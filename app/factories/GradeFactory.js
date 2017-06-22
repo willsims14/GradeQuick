@@ -349,6 +349,7 @@ app.factory("GradeStorage", function(AuthFactory, FBCreds, $http, $q, CourseSett
 	        // Keeps track of courses without grades so they aren't taken into account
 	        // 	for GPA calculation
 	        if(!angular.isNumber(myCourses[i].finalWeighted) || myCourses[i].finalWeighted === '*'){
+	        	console.log("NOT GRADED: ", myCourses[i]);
 	        	lengthToSubtract++;
 	        }else{
 		        if(myCourses[i].finalWeighted >= courseSettings.A.min){
